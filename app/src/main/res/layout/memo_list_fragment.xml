@@ -3,14 +3,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.muijp.hibi.memolist.MemoListViewModel" />
+            type="com.muijp.hibi.ui.memolist.MemoListViewModel" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".memolist.MemoListFragment">
+        tools:context=".ui.memolist.MemoListFragment">
 
         <TextView
             android:layout_width="match_parent"

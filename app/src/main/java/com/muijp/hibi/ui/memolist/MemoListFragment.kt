@@ -1,4 +1,4 @@
-package com.muijp.hibi.memolist
+package com.muijp.hibi.ui.memolist
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.muijp.hibi.R
 import com.muijp.hibi.databinding.MemoListFragmentBinding
 
 class MemoListFragment : Fragment() {

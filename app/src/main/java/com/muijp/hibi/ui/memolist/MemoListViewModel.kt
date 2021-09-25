@@ -1,4 +1,4 @@
-package com.muijp.hibi.memolist
+package com.muijp.hibi.ui.memolist
 
 import androidx.lifecycle.ViewModel
 
