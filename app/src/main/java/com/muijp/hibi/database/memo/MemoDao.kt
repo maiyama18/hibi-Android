@@ -8,7 +8,7 @@ interface MemoDao {
     @Query("SELECT * FROM memo ORDER BY formattedDate DESC")
     fun observeAll(): LiveData<List<Memo>>
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(memo: Memo)
 
     @Update
