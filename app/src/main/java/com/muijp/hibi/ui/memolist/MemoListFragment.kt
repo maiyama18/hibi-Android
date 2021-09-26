@@ -26,6 +26,12 @@ class MemoListFragment : Fragment() {
         val binding = MemoListFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
 
+        val adapter = MemoListAdapter()
+        binding.memoListRecyclerView.adapter = adapter
+        viewModel.memos.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
         return binding.root
     }
 }
