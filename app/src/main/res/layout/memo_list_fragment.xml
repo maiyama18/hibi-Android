@@ -7,9 +7,9 @@
             type="com.muijp.hibi.ui.memolist.MemoListViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/memo_list_recycler_view"
@@ -17,5 +17,14 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/memo_list_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/normal_margin"
+            android:src="@android:drawable/ic_menu_edit"
+            android:contentDescription="@string/edit_today_s_memo" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

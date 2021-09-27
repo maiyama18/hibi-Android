@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">hibi</string>
+    <string name="edit_today_s_memo">edit today\'s memo</string>
 </resources>
