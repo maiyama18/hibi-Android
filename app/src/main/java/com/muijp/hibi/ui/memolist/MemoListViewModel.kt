@@ -10,6 +10,10 @@ class MemoListViewModel(
     private val repository: MemoRepository,
 ): ViewModel() {
     val memos: LiveData<List<Memo>> = repository.observeAll()
+
+    fun onFABTapped() {
+        // 遷移
+    }
 }
 
 class MemoListViewModelFactory(private val repository: MemoRepository): ViewModelProvider.Factory {
