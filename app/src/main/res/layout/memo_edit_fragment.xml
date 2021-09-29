@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.memoedit.MemoEditFragment">
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.muijp.hibi.ui.memoedit.MemoEditViewModel" />
+    </data>
 
-    <TextView
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:context=".ui.memoedit.MemoEditFragment">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Hello" />
+
+    </FrameLayout>
+</layout>

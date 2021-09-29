@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoListFragmentBinding
 import com.muijp.hibi.repository.MemoRepository
@@ -30,6 +31,15 @@ class MemoListFragment : Fragment() {
         binding.memoListRecyclerView.adapter = adapter
         viewModel.memos.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+
+        viewModel.goToMemoEdit.observe(viewLifecycleOwner) { formattedDate ->
+            if (formattedDate != null) {
+                findNavController().navigate(
+                    MemoListFragmentDirections.actionMemoListFragmentToMemoEditFragment(formattedDate)
+                )
+                viewModel.goToMemoEditComplete()
+            }
         }
 
         return binding.root

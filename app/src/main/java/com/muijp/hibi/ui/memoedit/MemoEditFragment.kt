@@ -6,22 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.muijp.hibi.R
+import androidx.navigation.fragment.navArgs
+import com.muijp.hibi.database.getDatabase
+import com.muijp.hibi.databinding.MemoEditFragmentBinding
+import com.muijp.hibi.repository.MemoRepository
 
 class MemoEditFragment : Fragment() {
     private lateinit var viewModel: MemoEditViewModel
+    private val args: MemoEditFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.memo_edit_fragment, container, false)
-    }
+        val database = getDatabase(requireActivity().application)
+        val repository = MemoRepository(database)
+        viewModel = ViewModelProvider(this, MemoEditViewModelFactory(args.formattedDate, repository))
+            .get(MemoEditViewModel::class.java)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MemoEditViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+        val binding = MemoEditFragmentBinding.inflate(inflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
+        return binding.root
+    }
 }
