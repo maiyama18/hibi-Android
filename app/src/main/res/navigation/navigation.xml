@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/memoListFragment"
         android:name="com.muijp.hibi.ui.memolist.MemoListFragment"
-        android:label="MemoListFragment" >
+        android:label="hibi" >
         <action
             android:id="@+id/action_memoListFragment_to_memoEditFragment"
             app:destination="@id/memoEditFragment" />
@@ -15,7 +15,7 @@
     <fragment
         android:id="@+id/memoEditFragment"
         android:name="com.muijp.hibi.ui.memoedit.MemoEditFragment"
-        android:label="MemoEditFragment" >
+        android:label="{formattedDate}" >
         <argument
             android:name="formattedDate"
             app:argType="string" />
