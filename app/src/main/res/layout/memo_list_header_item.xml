@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="headerItem"
+            type="com.muijp.hibi.ui.memolist.MemoListItem.HeaderItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/purple_200" >
+
+        <TextView
+            android:id="@+id/header_date_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{headerItem.date.toString()}"
+            tools:text="2021-09-26" />
+
+    </LinearLayout>
+
+</layout>

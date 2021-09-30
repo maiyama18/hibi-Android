@@ -28,7 +28,7 @@ class MemoListFragment : Fragment() {
 
         val adapter = MemoListAdapter()
         binding.memoListRecyclerView.adapter = adapter
-        viewModel.memos.observe(viewLifecycleOwner) {
+        viewModel.items.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
@@ -42,9 +42,5 @@ class MemoListFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 }

@@ -5,41 +5,80 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.muijp.hibi.database.memo.Memo
-import com.muijp.hibi.databinding.MemoListItemBinding
+import com.muijp.hibi.databinding.MemoListHeaderItemBinding
+import com.muijp.hibi.databinding.MemoListMemoItemBinding
+import java.security.InvalidParameterException
 
-class MemoListAdapter: ListAdapter<Memo, MemoListAdapter.ViewHolder>(DiffCallback) {
+class MemoListAdapter: ListAdapter<MemoListItem, RecyclerView.ViewHolder>(DiffCallback) {
     companion object {
-        object DiffCallback: DiffUtil.ItemCallback<Memo>() {
-            override fun areItemsTheSame(oldItem: Memo, newItem: Memo): Boolean {
-                return oldItem === newItem
+        object DiffCallback: DiffUtil.ItemCallback<MemoListItem>() {
+            override fun areItemsTheSame(oldItem: MemoListItem, newItem: MemoListItem): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Memo, newItem: Memo): Boolean {
+            override fun areContentsTheSame(oldItem: MemoListItem, newItem: MemoListItem): Boolean {
                 return oldItem == newItem
             }
         }
+
     }
 
-    class ViewHolder(private val binding: MemoListItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class MemoViewHolder(private val binding: MemoListMemoItemBinding): RecyclerView.ViewHolder(binding.root) {
         companion object {
-            fun from(parent: ViewGroup): ViewHolder {
+            fun from(parent: ViewGroup): MemoViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
-                val binding = MemoListItemBinding.inflate(inflater, parent, false)
-                return ViewHolder(binding)
+                val binding = MemoListMemoItemBinding.inflate(inflater, parent, false)
+                return MemoViewHolder(binding)
             }
         }
 
-        fun bind(memo: Memo) {
-            binding.memo = memo
+        fun bind(item: MemoListItem.MemoItem) {
+            binding.memoItem = item
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+    class HeaderViewHolder(private val binding: MemoListHeaderItemBinding): RecyclerView.ViewHolder(binding.root) {
+        companion object {
+            fun from(parent: ViewGroup): HeaderViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val binding = MemoListHeaderItemBinding.inflate(inflater, parent, false)
+                return HeaderViewHolder(binding)
+            }
+        }
+
+        fun bind(item: MemoListItem.HeaderItem) {
+            binding.headerItem = item
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    private val itemViewTypeHeader = 0
+    private val itemViewTypeMemo = 1
+
+    override fun getItemViewType(position: Int): Int {
+        return when(getItem(position)) {
+            is MemoListItem.HeaderItem -> itemViewTypeHeader
+            is MemoListItem.MemoItem -> itemViewTypeMemo
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            itemViewTypeHeader -> HeaderViewHolder.from(parent)
+            itemViewTypeMemo -> MemoViewHolder.from(parent)
+            else -> throw InvalidParameterException("invalid viewType: $viewType")
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is HeaderViewHolder -> {
+                val item = getItem(position) as MemoListItem.HeaderItem
+                holder.bind(item)
+            }
+            is MemoViewHolder -> {
+                val item = getItem(position) as MemoListItem.MemoItem
+                holder.bind(item)
+            }
+        }
     }
 }
