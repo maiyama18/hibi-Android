@@ -26,7 +26,10 @@ class MemoListFragment : Fragment() {
         val binding = MemoListFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
 
-        val adapter = MemoListAdapter()
+        val memoListListener = MemoListListener { memoItem ->
+            goToMemoEditFragment(memoItem.memo.id)
+        }
+        val adapter = MemoListAdapter(memoListListener)
         binding.memoListRecyclerView.adapter = adapter
         viewModel.items.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -34,13 +37,17 @@ class MemoListFragment : Fragment() {
 
         viewModel.goToMemoCreate.observe(viewLifecycleOwner) {
             if (it == true) {
-                findNavController().navigate(
-                    MemoListFragmentDirections.actionMemoListFragmentToMemoEditFragment(null)
-                )
-                viewModel.goToMemoCreateComplete()
+                goToMemoEditFragment(null)
             }
         }
 
         return binding.root
+    }
+
+    private fun goToMemoEditFragment(memoId: String?) {
+        findNavController().navigate(
+            MemoListFragmentDirections.actionMemoListFragmentToMemoEditFragment(memoId)
+        )
+        viewModel.goToMemoCreateComplete()
     }
 }

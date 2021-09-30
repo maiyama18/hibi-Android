@@ -31,6 +31,7 @@ class MemoEditViewModel(
             }
 
             memo = m
+            memoText.value = m.text
         }
     }
 

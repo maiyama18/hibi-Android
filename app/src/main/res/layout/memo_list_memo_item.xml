@@ -6,12 +6,16 @@
         <variable
             name="memoItem"
             type="com.muijp.hibi.ui.memolist.MemoListItem.MemoItem" />
+        <variable
+            name="listener"
+            type="com.muijp.hibi.ui.memolist.MemoListListener" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:onClick="@{() -> listener.handleClickMemoItem(memoItem)}">
 
         <TextView
             android:id="@+id/memo_date_text"
@@ -26,6 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@{memoItem.memo.text}"
             tools:text="今日は多摩川に散歩に行った。" />
+
     </LinearLayout>
 
 </layout>

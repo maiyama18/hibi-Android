@@ -9,7 +9,9 @@ import com.muijp.hibi.databinding.MemoListHeaderItemBinding
 import com.muijp.hibi.databinding.MemoListMemoItemBinding
 import java.security.InvalidParameterException
 
-class MemoListAdapter: ListAdapter<MemoListItem, RecyclerView.ViewHolder>(DiffCallback) {
+class MemoListAdapter(
+    private val listener: MemoListListener,
+): ListAdapter<MemoListItem, RecyclerView.ViewHolder>(DiffCallback) {
     companion object {
         object DiffCallback: DiffUtil.ItemCallback<MemoListItem>() {
             override fun areItemsTheSame(oldItem: MemoListItem, newItem: MemoListItem): Boolean {
@@ -32,8 +34,9 @@ class MemoListAdapter: ListAdapter<MemoListItem, RecyclerView.ViewHolder>(DiffCa
             }
         }
 
-        fun bind(item: MemoListItem.MemoItem) {
+        fun bind(item: MemoListItem.MemoItem, listener: MemoListListener) {
             binding.memoItem = item
+            binding.listener = listener
         }
     }
 
@@ -77,7 +80,7 @@ class MemoListAdapter: ListAdapter<MemoListItem, RecyclerView.ViewHolder>(DiffCa
             }
             is MemoViewHolder -> {
                 val item = getItem(position) as MemoListItem.MemoItem
-                holder.bind(item)
+                holder.bind(item, listener)
             }
         }
     }
