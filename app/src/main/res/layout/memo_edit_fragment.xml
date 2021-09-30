@@ -12,10 +12,16 @@
         android:layout_height="match_parent"
         tools:context=".ui.memoedit.MemoEditFragment">
 
-        <TextView
+        <EditText
+            android:id="@+id/memo_edit_text"
+            android:text="@={viewModel.memoText}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Hello" />
+            android:inputType="textMultiLine"
+            android:gravity="top|start"
+            android:importantForAutofill="no"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/normal_margin" />
 
     </FrameLayout>
 </layout>

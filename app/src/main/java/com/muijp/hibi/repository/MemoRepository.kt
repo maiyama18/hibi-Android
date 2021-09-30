@@ -15,12 +15,12 @@ class MemoRepository(
         return database.memoDao.observeAll()
     }
 
-    suspend fun insert(memo: Memo) {
-        return database.memoDao.insert(memo)
+    suspend fun findByFormattedDate(formattedDate: String): Memo? {
+        return database.memoDao.findByFormattedDate(formattedDate)
     }
 
-    suspend fun update(memo: Memo) {
-        return database.memoDao.update(memo)
+    suspend fun upsert(memo: Memo) {
+        return database.memoDao.upsert(memo)
     }
 
     suspend fun delete(memo: Memo) {
