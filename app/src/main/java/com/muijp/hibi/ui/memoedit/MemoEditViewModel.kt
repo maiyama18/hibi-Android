@@ -38,7 +38,7 @@ class MemoEditViewModel(
     fun onMemoTextUpdated() {
         viewModelScope.launch {
             val memoText = memoText.value
-            if (::memo.isInitialized && memoText != null) {
+            if (::memo.isInitialized && !memoText.isNullOrEmpty()) {
                 memo.text = memoText
                 repository.upsert(memo)
             }
