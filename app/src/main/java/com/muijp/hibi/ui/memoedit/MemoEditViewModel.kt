@@ -15,6 +15,9 @@ class MemoEditViewModel(
     private lateinit var memo: Memo
     val memoText = MutableLiveData<String>()
 
+    val shouldFocusOnStart: Boolean
+        get() = (memoId == null) && memoText.value.isNullOrEmpty()
+
     fun retrieveMemo() {
         viewModelScope.launch {
             var m = if (memoId != null) {

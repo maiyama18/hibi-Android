@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoEditFragmentBinding
+import com.muijp.hibi.extension.focus
 import com.muijp.hibi.repository.MemoRepository
 
 class MemoEditFragment : Fragment() {
@@ -36,6 +37,14 @@ class MemoEditFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (viewModel.shouldFocusOnStart) {
+            binding.memoEditText.focus()
+        }
     }
 }
 
