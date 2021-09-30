@@ -1,10 +1,6 @@
 package com.muijp.hibi.repository
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Update
 import com.muijp.hibi.database.AppDatabase
 import com.muijp.hibi.database.memo.Memo
 
@@ -15,8 +11,8 @@ class MemoRepository(
         return database.memoDao.observeAll()
     }
 
-    suspend fun findByFormattedDate(formattedDate: String): Memo? {
-        return database.memoDao.findByFormattedDate(formattedDate)
+    suspend fun find(id: String): Memo? {
+        return database.memoDao.find(id)
     }
 
     suspend fun upsert(memo: Memo) {

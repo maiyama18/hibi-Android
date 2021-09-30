@@ -1,33 +1,51 @@
 package com.muijp.hibi.ui.memoedit
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 
 class MemoEditViewModel(
-    private val formattedDate: String,
+    private val memoId: String?,
     private val repository: MemoRepository,
 ) : ViewModel() {
+    private lateinit var memo: Memo
     val memoText = MutableLiveData<String>()
 
-    fun reflectSavedMemoText() {
+    fun retrieveMemo() {
         viewModelScope.launch {
-            val memo = repository.findByFormattedDate(formattedDate)
-            memoText.value = memo?.memo ?: ""
+            var m = if (memoId != null) {
+                repository.find(memoId)
+            } else {
+                null
+            }
+
+            if (m == null) {
+                m = Memo.new("")
+            }
+
+            memo = m
         }
     }
 
-    fun saveMemo() {
+    fun onMemoTextUpdated() {
         viewModelScope.launch {
-            val memo = Memo(formattedDate, memoText.value ?: "")
-            repository.upsert(memo)
+            val memoText = memoText.value
+            if (::memo.isInitialized && memoText != null) {
+                memo.text = memoText
+                repository.upsert(memo)
+            }
         }
     }
 }
 
-class MemoEditViewModelFactory(private var formattedDate: String, private val repository: MemoRepository): ViewModelProvider.Factory {
+class MemoEditViewModelFactory(
+    private var formattedDate: String?,
+    private val repository: MemoRepository,
+): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MemoEditViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

@@ -5,14 +5,14 @@ import androidx.room.*
 
 @Dao
 interface MemoDao {
-    @Query("SELECT * FROM memo ORDER BY formattedDate DESC")
+    @Query("SELECT * FROM memo ORDER BY createdAt DESC")
     fun observeAll(): LiveData<List<Memo>>
 
-    @Query("SELECT * FROM memo WHERE formattedDate = :formattedDate")
-    suspend fun findByFormattedDate(formattedDate: String): Memo?
+    @Query("SELECT * FROM memo WHERE id = :id")
+    suspend fun find(id: String): Memo?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(memo: Memo)
+    suspend fun insert(memo: Memo): Long
 
     @Update
     suspend fun update(memo: Memo)
@@ -22,10 +22,7 @@ interface MemoDao {
 
     @Transaction
     suspend fun upsert(memo: Memo) {
-        val existingMemo = findByFormattedDate(memo.formattedDate)
-        if (existingMemo == null) {
-            insert(memo)
-        } else {
+        if (insert(memo) == -1L) {
             update(memo)
         }
     }

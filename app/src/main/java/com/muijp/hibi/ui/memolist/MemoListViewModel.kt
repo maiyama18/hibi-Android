@@ -1,31 +1,27 @@
 package com.muijp.hibi.ui.memolist
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 class MemoListViewModel(
-    private val repository: MemoRepository,
+    repository: MemoRepository,
 ): ViewModel() {
     val memos: LiveData<List<Memo>> = repository.observeAll()
 
-    private val _goToMemoEdit = MutableLiveData<String?>()
-    val goToMemoEdit: LiveData<String?>
-        get() = _goToMemoEdit
+    private val _goToMemoCreate = MutableLiveData<Boolean>()
+    val goToMemoCreate: LiveData<Boolean>
+        get() = _goToMemoCreate
 
-    fun goToMemoEdit() {
-        val now = LocalDateTime.now()
-        val formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(now)
-        _goToMemoEdit.value = formattedDate
+    fun goToMemoCreate() {
+        _goToMemoCreate.value = true
     }
 
-    fun goToMemoEditComplete() {
-        _goToMemoEdit.value = null
+    fun goToMemoCreateComplete() {
+        _goToMemoCreate.value = false
     }
 }
 

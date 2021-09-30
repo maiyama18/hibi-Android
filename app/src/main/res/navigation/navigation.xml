@@ -15,9 +15,11 @@
     <fragment
         android:id="@+id/memoEditFragment"
         android:name="com.muijp.hibi.ui.memoedit.MemoEditFragment"
-        android:label="{formattedDate}" >
+        android:label="" >
         <argument
-            android:name="formattedDate"
-            app:argType="string" />
+            android:name="id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
