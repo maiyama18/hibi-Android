@@ -28,5 +28,9 @@
     <fragment
         android:id="@+id/memoSearchFragment"
         android:name="com.muijp.hibi.ui.memosearch.MemoSearchFragment"
-        android:label="@string/search_memo" />
+        android:label="@string/search_memo" >
+        <action
+            android:id="@+id/action_memoSearchFragment_to_memoEditFragment"
+            app:destination="@id/memoEditFragment" />
+    </fragment>
 </navigation>

@@ -16,6 +16,18 @@ class MemoSearchViewModel(
         memosToMemoListItems(memos)
     }
 
+    private val _goToMemoEdit = MutableLiveData<Boolean>()
+    val goToMemoEdit: LiveData<Boolean>
+        get() = _goToMemoEdit
+
+    fun goToMemoEdit() {
+        _goToMemoEdit.value = true
+    }
+
+    fun goToMemoEditComplete() {
+        _goToMemoEdit.value = false
+    }
+
     fun searchMemos() {
         val query = query.value?.trim()
         if (query.isNullOrEmpty()) {

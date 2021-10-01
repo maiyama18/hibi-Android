@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoSearchFragmentBinding
 import com.muijp.hibi.repository.MemoRepository
@@ -28,6 +29,7 @@ class MemoSearchFragment : Fragment() {
         binding.viewModel = viewModel
 
         val memoListListener = MemoListListener { memoItem ->
+            goToMemoEditFragment(memoItem.id)
         }
         val adapter = MemoListAdapter(memoListListener)
         binding.memoSearchedListRecyclerView.adapter = adapter
@@ -40,5 +42,12 @@ class MemoSearchFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun goToMemoEditFragment(memoId: String?) {
+        findNavController().navigate(
+            MemoSearchFragmentDirections.actionMemoSearchFragmentToMemoEditFragment(memoId)
+        )
+        viewModel.goToMemoEditComplete()
     }
 }
