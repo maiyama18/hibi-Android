@@ -12,6 +12,8 @@ import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoListFragmentBinding
 import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.MainActivity
+import com.muijp.hibi.ui.recyclerview.memolist.MemoListAdapter
+import com.muijp.hibi.ui.recyclerview.memolist.MemoListListener
 
 class MemoListFragment : Fragment() {
     private lateinit var viewModel: MemoListViewModel

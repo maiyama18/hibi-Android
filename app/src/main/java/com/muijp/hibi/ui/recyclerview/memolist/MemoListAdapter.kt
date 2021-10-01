@@ -1,4 +1,4 @@
-package com.muijp.hibi.ui.memolist
+package com.muijp.hibi.ui.recyclerview.memolist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -22,7 +22,6 @@ class MemoListAdapter(
                 return oldItem == newItem
             }
         }
-
     }
 
     class MemoViewHolder(private val binding: MemoListMemoItemBinding): RecyclerView.ViewHolder(binding.root) {

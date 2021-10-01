@@ -3,7 +3,7 @@ package com.muijp.hibi.ui.memosearch
 import androidx.lifecycle.*
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import com.muijp.hibi.ui.memolist.memosToMemoListItems
+import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
 import kotlinx.coroutines.launch
 
 class MemoSearchViewModel(

@@ -3,6 +3,7 @@ package com.muijp.hibi.ui.memolist
 import androidx.lifecycle.*
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
+import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
 
 class MemoListViewModel(
     repository: MemoRepository,

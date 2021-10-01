@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoSearchFragmentBinding
 import com.muijp.hibi.repository.MemoRepository
-import com.muijp.hibi.ui.memolist.MemoListAdapter
-import com.muijp.hibi.ui.memolist.MemoListListener
+import com.muijp.hibi.ui.recyclerview.memolist.MemoListAdapter
+import com.muijp.hibi.ui.recyclerview.memolist.MemoListListener
 
 class MemoSearchFragment : Fragment() {
     private lateinit var viewModel: MemoSearchViewModel

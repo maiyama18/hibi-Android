@@ -1,4 +1,4 @@
-package com.muijp.hibi.ui.memolist
+package com.muijp.hibi.ui.recyclerview.memolist
 
 class MemoListListener(
     private var onClickMemoItem: (memoItem: MemoListItem.MemoItem) -> Unit,

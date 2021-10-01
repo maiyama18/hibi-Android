@@ -5,7 +5,7 @@
     <data>
         <variable
             name="headerItem"
-            type="com.muijp.hibi.ui.memolist.MemoListItem.HeaderItem" />
+            type="com.muijp.hibi.ui.recyclerview.memolist.MemoListItem.HeaderItem" />
     </data>
 
     <LinearLayout

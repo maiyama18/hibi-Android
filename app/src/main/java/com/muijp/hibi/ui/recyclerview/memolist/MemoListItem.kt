@@ -1,4 +1,4 @@
-package com.muijp.hibi.ui.memolist
+package com.muijp.hibi.ui.recyclerview.memolist
 
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.extension.formattedDate
