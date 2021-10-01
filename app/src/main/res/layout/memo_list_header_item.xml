@@ -18,8 +18,8 @@
             android:id="@+id/header_date_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{headerItem.date.toString()}"
-            tools:text="2021-09-26" />
+            android:text="@{headerItem.formattedDate}"
+            tools:text="2021/09/26" />
 
     </LinearLayout>
 

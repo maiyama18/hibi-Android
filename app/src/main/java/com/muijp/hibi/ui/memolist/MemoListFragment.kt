@@ -29,7 +29,7 @@ class MemoListFragment : Fragment() {
         binding.viewModel = viewModel
 
         val memoListListener = MemoListListener { memoItem ->
-            goToMemoEditFragment(memoItem.memo.id)
+            goToMemoEditFragment(memoItem.id)
         }
         val adapter = MemoListAdapter(memoListListener)
         binding.memoListRecyclerView.adapter = adapter

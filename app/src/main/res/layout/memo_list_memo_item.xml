@@ -22,7 +22,7 @@
             android:id="@+id/memo_date_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{memoItem.memo.createdAt.toString()}"
+            android:text="@{memoItem.formattedTime}"
             tools:text="2021-09-26" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/memo_baloon"
             android:padding="@dimen/normal_margin"
-            android:text="@{memoItem.memo.text}"
+            android:text="@{memoItem.text}"
             tools:text="今日は多摩川に散歩に行った。" />
 
     </LinearLayout>
