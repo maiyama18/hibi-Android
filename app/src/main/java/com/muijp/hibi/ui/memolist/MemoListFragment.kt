@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.muijp.hibi.R
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoListFragmentBinding
 import com.muijp.hibi.repository.MemoRepository
+import com.muijp.hibi.ui.MainActivity
 
 class MemoListFragment : Fragment() {
     private lateinit var viewModel: MemoListViewModel
@@ -44,10 +46,47 @@ class MemoListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        setupToolbar()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        teardownToolbar()
+    }
+
     private fun goToMemoEditFragment(memoId: String?) {
         findNavController().navigate(
             MemoListFragmentDirections.actionMemoListFragmentToMemoEditFragment(memoId)
         )
         viewModel.goToMemoCreateComplete()
+    }
+
+    private fun setupToolbar() {
+        setHasOptionsMenu(true)
+
+        val toolbar = (activity as? MainActivity)?.toolbar
+        toolbar?.let {
+            it.menu.clear()
+            it.inflateMenu(R.menu.memo_list_menu)
+            it.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_search_memo -> {
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+    }
+
+    private fun teardownToolbar() {
+        setHasOptionsMenu(false)
+
+        val toolbar = (activity as? MainActivity)?.toolbar
+        toolbar?.menu?.clear()
     }
 }

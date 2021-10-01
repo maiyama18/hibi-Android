@@ -51,8 +51,6 @@ class MemoEditFragment : Fragment() {
             }
         }
 
-        setupToolbar()
-
         return binding.root
     }
 
@@ -62,10 +60,11 @@ class MemoEditFragment : Fragment() {
         if (viewModel.shouldFocusOnStart) {
             binding.memoEditText.focus()
         }
+        setupToolbar()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
 
         teardownToolbar()
     }
