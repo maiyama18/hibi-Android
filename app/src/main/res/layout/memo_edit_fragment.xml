@@ -21,7 +21,7 @@
             android:gravity="top|start"
             android:importantForAutofill="no"
             android:background="@android:color/transparent"
-            android:padding="@dimen/normal_margin" />
+            android:padding="@dimen/regular_margin" />
 
     </FrameLayout>
 </layout>

@@ -4,4 +4,10 @@
         <item name="android:theme">@style/ToolbarTheme</item>
         <item name="android:background">?attr/colorPrimary</item>
     </style>
+
+    <style name="DateHeaderTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
 </resources>

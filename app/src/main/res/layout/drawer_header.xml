@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:background="?attr/colorPrimary"
-        android:padding="@dimen/normal_margin"
+        android:padding="@dimen/regular_margin"
         android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
