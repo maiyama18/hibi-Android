@@ -75,6 +75,9 @@ class MemoListFragment : Fragment() {
             it.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_search_memo -> {
+                        findNavController().navigate(
+                            MemoListFragmentDirections.actionMemoListFragmentToMemoSearchFragment()
+                        )
                         true
                     }
                     else -> false

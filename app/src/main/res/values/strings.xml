@@ -8,4 +8,5 @@
     <string name="delete">削除</string>
     <string name="cancel">キャンセル</string>
     <string name="action_search_memo">メモを検索する</string>
+    <string name="search_memo">メモ検索</string>
 </resources>

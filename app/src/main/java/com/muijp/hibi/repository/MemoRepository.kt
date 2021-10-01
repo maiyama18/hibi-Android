@@ -15,6 +15,10 @@ class MemoRepository(
         return database.memoDao.find(id)
     }
 
+    suspend fun search(query: String): List<Memo> {
+        return database.memoDao.search("%${query}%")
+    }
+
     suspend fun upsert(memo: Memo) {
         return database.memoDao.upsert(memo)
     }
