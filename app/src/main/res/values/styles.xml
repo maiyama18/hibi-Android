@@ -10,4 +10,14 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/colorSecondaryVariant</item>
     </style>
+
+    <style name="MemoTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="MemoTimeAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

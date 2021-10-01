@@ -26,6 +26,7 @@
             android:background="@drawable/memo_baloon"
             android:padding="@dimen/memo_baloon_margin"
             android:text="@{memoItem.text}"
+            style="@style/MemoTextAppearance"
             tools:text="今日は多摩川に散歩に行った。" />
 
         <TextView
@@ -33,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{memoItem.formattedTime}"
+            style="@style/MemoTimeAppearance"
             tools:text="2021-09-26" />
 
     </LinearLayout>
