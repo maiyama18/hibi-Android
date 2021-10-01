@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.muijp.hibi.R
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoEditFragmentBinding
 import com.muijp.hibi.extension.focus
@@ -43,6 +44,14 @@ class MemoEditFragment : Fragment() {
             }
         }
 
+        viewModel.backToPrevious.observe(viewLifecycleOwner) {
+            if (it == true) {
+                activity?.onBackPressed()
+            }
+        }
+
+        setupToolbar()
+
         return binding.root
     }
 
@@ -52,6 +61,38 @@ class MemoEditFragment : Fragment() {
         if (viewModel.shouldFocusOnStart) {
             binding.memoEditText.focus()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        teardownToolbar()
+    }
+
+    private fun setupToolbar() {
+        setHasOptionsMenu(true)
+
+        val toolbar = (activity as? MainActivity)?.toolbar
+        toolbar?.let {
+            it.menu.clear()
+            it.inflateMenu(R.menu.memo_edit_menu)
+            it.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_delete_memo -> {
+                        viewModel.onMemoDeleted()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+    }
+
+    private fun teardownToolbar() {
+        setHasOptionsMenu(false)
+
+        val toolbar = (activity as? MainActivity)?.toolbar
+        toolbar?.menu?.clear()
     }
 }
 

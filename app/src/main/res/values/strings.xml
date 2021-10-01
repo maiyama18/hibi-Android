@@ -3,4 +3,5 @@
     <string name="edit_today_s_memo">edit today\'s memo</string>
     <string name="new_memo">新規メモ</string>
     <string name="memo_list">メモ一覧</string>
+    <string name="delete_memo">メモを削除する</string>
 </resources>

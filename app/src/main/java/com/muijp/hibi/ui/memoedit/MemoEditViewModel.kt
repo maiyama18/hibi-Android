@@ -21,6 +21,10 @@ class MemoEditViewModel(
     val title: LiveData<String>
         get() = _title
 
+    private val _backToPrevious = MutableLiveData<Boolean>()
+    val backToPrevious: LiveData<Boolean>
+        get() = _backToPrevious
+
     val shouldFocusOnStart: Boolean
         get() = (memoId == null) && memoText.value.isNullOrEmpty()
 
@@ -50,6 +54,13 @@ class MemoEditViewModel(
                 memo.text = memoText
                 repository.upsert(memo)
             }
+        }
+    }
+
+    fun onMemoDeleted() {
+        viewModelScope.launch {
+            repository.delete(memo)
+            _backToPrevious.value = true
         }
     }
 }

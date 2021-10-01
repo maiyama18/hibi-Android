@@ -25,4 +25,7 @@ class MainActivity: AppCompatActivity() {
     fun setToolbarTitle(title: String) {
         binding.toolbar.title = title
     }
+
+    val toolbar: androidx.appcompat.widget.Toolbar
+        get() = binding.toolbar
 }
