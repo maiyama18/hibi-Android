@@ -14,3 +14,13 @@ sealed class MemoListItem {
         override val id: String = date.toString()
     }
 }
+
+fun memosToMemoListItems(memos: List<Memo>): List<MemoListItem> {
+    val map = memos.groupBy { it.createdAt.toLocalDate() }
+    val items = mutableListOf<MemoListItem>()
+    map.forEach { (date, memos) ->
+        items.add(MemoListItem.HeaderItem(date))
+        items.addAll(memos.map { MemoListItem.MemoItem(it) })
+    }
+    return items
+}

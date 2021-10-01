@@ -9,13 +9,7 @@ class MemoListViewModel(
 ): ViewModel() {
     private val memos: LiveData<List<Memo>> = repository.observeAll()
     val items = Transformations.map(memos) { memos ->
-        val map = memos.groupBy { it.createdAt.toLocalDate() }
-        val items = mutableListOf<MemoListItem>()
-        map.forEach { (date, memos) ->
-            items.add(MemoListItem.HeaderItem(date))
-            items.addAll(memos.map { MemoListItem.MemoItem(it) })
-        }
-        items
+        memosToMemoListItems(memos)
     }
 
     private val _goToMemoCreate = MutableLiveData<Boolean>()
