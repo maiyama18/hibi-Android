@@ -1,37 +1,45 @@
 package com.muijp.hibi.ui.memoedit
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
+import com.muijp.hibi.R
 import com.muijp.hibi.database.memo.Memo
+import com.muijp.hibi.extension.formattedDateTime
 import com.muijp.hibi.repository.MemoRepository
 import kotlinx.coroutines.launch
 
 class MemoEditViewModel(
+    application: Application,
     private val memoId: String?,
     private val repository: MemoRepository,
-) : ViewModel() {
+): AndroidViewModel(application) {
     private lateinit var memo: Memo
+
     val memoText = MutableLiveData<String>()
+
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String>
+        get() = _title
 
     val shouldFocusOnStart: Boolean
         get() = (memoId == null) && memoText.value.isNullOrEmpty()
 
     fun retrieveMemo() {
         viewModelScope.launch {
-            var m = if (memoId != null) {
+            val m = if (memoId != null) {
                 repository.find(memoId)
             } else {
                 null
             }
 
-            if (m == null) {
-                m = Memo.new("")
+            if (m != null) {
+                memo = m
+                memoText.value = m.text
+                _title.value = m.createdAt.formattedDateTime
+            } else {
+                memo = Memo.new("")
+                _title.value = getApplication<Application>().getString(R.string.new_memo)
             }
-
-            memo = m
-            memoText.value = m.text
         }
     }
 
@@ -47,13 +55,14 @@ class MemoEditViewModel(
 }
 
 class MemoEditViewModelFactory(
-    private var formattedDate: String?,
+    private val application: Application,
+    private val memoId: String?,
     private val repository: MemoRepository,
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MemoEditViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MemoEditViewModel(formattedDate, repository) as T
+            return MemoEditViewModel(application, memoId, repository) as T
         }
         throw IllegalArgumentException("unable to construct MemoEditViewModel")
     }

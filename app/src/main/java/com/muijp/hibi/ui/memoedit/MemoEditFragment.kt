@@ -11,6 +11,7 @@ import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoEditFragmentBinding
 import com.muijp.hibi.extension.focus
 import com.muijp.hibi.repository.MemoRepository
+import com.muijp.hibi.ui.MainActivity
 
 class MemoEditFragment : Fragment() {
     private lateinit var binding: MemoEditFragmentBinding
@@ -23,7 +24,7 @@ class MemoEditFragment : Fragment() {
     ): View? {
         val database = getDatabase(requireActivity().application)
         val repository = MemoRepository(database)
-        viewModel = ViewModelProvider(this, MemoEditViewModelFactory(args.id, repository))
+        viewModel = ViewModelProvider(this, MemoEditViewModelFactory( requireActivity().application, args.id, repository))
             .get(MemoEditViewModel::class.java)
 
         binding = MemoEditFragmentBinding.inflate(inflater)
@@ -34,6 +35,12 @@ class MemoEditFragment : Fragment() {
 
         viewModel.memoText.observe(viewLifecycleOwner) {
             viewModel.onMemoTextUpdated()
+        }
+
+        viewModel.title.observe(viewLifecycleOwner) {
+            if (it != null) {
+                (activity as MainActivity).setToolbarTitle(it)
+            }
         }
 
         return binding.root
