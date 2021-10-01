@@ -16,7 +16,10 @@
             android:id="@+id/memo_search_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@android:drawable/ic_menu_search"
+            android:layout_marginHorizontal="@dimen/regular_margin"
+            android:layout_marginTop="@dimen/half_margin"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="4dp"
             android:text="@={viewModel.query}"/>
 
         <androidx.recyclerview.widget.RecyclerView
