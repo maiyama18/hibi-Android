@@ -11,7 +11,7 @@ interface MemoDao {
     @Query("SELECT * FROM memo WHERE id = :id")
     suspend fun find(id: String): Memo?
 
-    @Query("SELECT * FROM memo WHERE text LIKE :percentQuery")
+    @Query("SELECT * FROM memo WHERE text LIKE :percentQuery ORDER BY createdAt DESC")
     suspend fun search(percentQuery: String): List<Memo>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
