@@ -4,4 +4,7 @@
     <string name="new_memo">新規メモ</string>
     <string name="memo_list">メモ一覧</string>
     <string name="delete_memo">メモを削除する</string>
+    <string name="delete_memo_message">このメモを削除しますか？</string>
+    <string name="delete">削除</string>
+    <string name="cancel">キャンセル</string>
 </resources>

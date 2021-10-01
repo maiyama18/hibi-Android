@@ -13,6 +13,7 @@ import com.muijp.hibi.databinding.MemoEditFragmentBinding
 import com.muijp.hibi.extension.focus
 import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.MainActivity
+import com.muijp.hibi.ui.dialog.MessageDialogFragment
 
 class MemoEditFragment : Fragment() {
     private lateinit var binding: MemoEditFragmentBinding
@@ -79,7 +80,13 @@ class MemoEditFragment : Fragment() {
             it.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_delete_memo -> {
-                        viewModel.onMemoDeleted()
+                        MessageDialogFragment(
+                            R.string.delete_memo_message,
+                            R.string.delete,
+                            R.string.cancel,
+                            { viewModel.onMemoDeleted() },
+                            {}
+                        ).show(parentFragmentManager, "delete_memo")
                         true
                     }
                     else -> false
