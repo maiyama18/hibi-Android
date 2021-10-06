@@ -7,8 +7,12 @@ import com.muijp.hibi.database.memo.Memo
 class MemoRepository(
     private val database: AppDatabase,
 ) {
-    fun observeAll(): LiveData<List<Memo>> {
-        return database.memoDao.observeAll()
+    fun observe(limit: Int): LiveData<List<Memo>> {
+        return database.memoDao.observe(limit)
+    }
+
+    suspend fun count(): Long {
+        return database.memoDao.count()
     }
 
     suspend fun find(id: String): Memo? {

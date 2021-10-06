@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.muijp.hibi.R
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoListFragmentBinding
@@ -38,6 +40,16 @@ class MemoListFragment : Fragment() {
         viewModel.items.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+        binding.memoListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = binding.memoListRecyclerView.layoutManager as? LinearLayoutManager ?: return
+                if (layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1) {
+                    viewModel.onScrolledToBottom()
+                }
+            }
+        })
 
         viewModel.goToMemoCreate.observe(viewLifecycleOwner) {
             if (it == true) {
