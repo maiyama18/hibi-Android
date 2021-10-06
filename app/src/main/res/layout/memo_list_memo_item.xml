@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/regular_margin"
-        android:paddingVertical="@dimen/half_margin"
-        android:onClick="@{() -> listener.handleClickMemoItem(memoItem)}">
+        android:paddingVertical="@dimen/half_margin">
 
         <TextView
             android:id="@+id/memo_text"
@@ -27,6 +26,7 @@
             android:padding="@dimen/memo_baloon_margin"
             android:text="@{memoItem.text}"
             style="@style/MemoTextAppearance"
+            android:onClick="@{() -> listener.handleClickMemoItem(memoItem)}"
             tools:text="今日は多摩川に散歩に行った。" />
 
         <TextView
