@@ -25,7 +25,7 @@ class MemoEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val database = getDatabase(requireActivity().application)
-        val repository = MemoRepository(database)
+        val repository = MemoRepository(database.memoDao)
         viewModel = ViewModelProvider(this, MemoEditViewModelFactory( requireActivity().application, args.id, repository))
             .get(MemoEditViewModel::class.java)
 

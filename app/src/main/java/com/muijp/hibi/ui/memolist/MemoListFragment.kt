@@ -25,7 +25,7 @@ class MemoListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val database = getDatabase(requireActivity().application)
-        val repository = MemoRepository(database)
+        val repository = MemoRepository(database.memoDao)
         viewModel = ViewModelProvider(this, MemoListViewModelFactory(repository))
             .get(MemoListViewModel::class.java)
 
