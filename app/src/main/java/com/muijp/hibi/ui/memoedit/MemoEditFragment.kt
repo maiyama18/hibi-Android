@@ -11,6 +11,7 @@ import com.muijp.hibi.R
 import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoEditFragmentBinding
 import com.muijp.hibi.extension.focus
+import com.muijp.hibi.provider.StringProvider
 import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.MainActivity
 import com.muijp.hibi.ui.dialog.MessageDialogFragment
@@ -26,7 +27,8 @@ class MemoEditFragment : Fragment() {
     ): View? {
         val database = getDatabase(requireActivity().application)
         val repository = MemoRepository(database.memoDao)
-        viewModel = ViewModelProvider(this, MemoEditViewModelFactory( requireActivity().application, args.id, repository))
+        val stringProvider = StringProvider(requireActivity())
+        viewModel = ViewModelProvider(this, MemoEditViewModelFactory(args.id, repository, stringProvider))
             .get(MemoEditViewModel::class.java)
 
         binding = MemoEditFragmentBinding.inflate(inflater)

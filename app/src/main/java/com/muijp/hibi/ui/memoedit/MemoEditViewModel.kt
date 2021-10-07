@@ -1,18 +1,18 @@
 package com.muijp.hibi.ui.memoedit
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.muijp.hibi.R
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.extension.formattedDateTime
+import com.muijp.hibi.provider.StringProvider
 import com.muijp.hibi.repository.MemoRepository
 import kotlinx.coroutines.launch
 
 class MemoEditViewModel(
-    application: Application,
     private val memoId: String?,
     private val repository: MemoRepository,
-): AndroidViewModel(application) {
+    private val stringProvider: StringProvider,
+): ViewModel() {
     private lateinit var memo: Memo
 
     val memoText = MutableLiveData<String>()
@@ -42,7 +42,7 @@ class MemoEditViewModel(
                 _title.value = m.createdAt.formattedDateTime
             } else {
                 memo = Memo.new("")
-                _title.value = getApplication<Application>().getString(R.string.new_memo)
+                _title.value = stringProvider.getString(R.string.new_memo)
             }
         }
     }
@@ -66,14 +66,14 @@ class MemoEditViewModel(
 }
 
 class MemoEditViewModelFactory(
-    private val application: Application,
     private val memoId: String?,
     private val repository: MemoRepository,
+    private val stringProvider: StringProvider,
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MemoEditViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MemoEditViewModel(application, memoId, repository) as T
+            return MemoEditViewModel(memoId, repository, stringProvider) as T
         }
         throw IllegalArgumentException("unable to construct MemoEditViewModel")
     }
