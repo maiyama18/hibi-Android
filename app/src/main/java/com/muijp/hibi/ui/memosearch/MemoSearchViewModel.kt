@@ -34,7 +34,7 @@ class MemoSearchViewModel @Inject constructor(
     fun searchMemos() {
         val query = query.value?.trim()
         if (query.isNullOrEmpty()) {
-            memos.value = arrayListOf()
+            memos.value = emptyList()
             return
         }
 
