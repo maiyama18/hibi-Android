@@ -4,9 +4,13 @@ import androidx.lifecycle.*
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
-class MemoListViewModel(
+@HiltViewModel
+class MemoListViewModel @Inject constructor(
     private val repository: MemoRepository,
 ) : ViewModel() {
     companion object {
@@ -18,6 +22,7 @@ class MemoListViewModel(
         repository.observe(it)
     }
     val items = Transformations.map(memos) { memos ->
+        Timber.d("memos first: ${memos.firstOrNull()?.text}")
         memosToMemoListItems(memos)
     }
 

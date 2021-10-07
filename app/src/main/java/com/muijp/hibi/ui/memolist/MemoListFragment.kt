@@ -5,30 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.muijp.hibi.R
-import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoListFragmentBinding
-import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.MainActivity
 import com.muijp.hibi.ui.recyclerview.memolist.MemoListAdapter
 import com.muijp.hibi.ui.recyclerview.memolist.MemoListListener
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
+@AndroidEntryPoint
 class MemoListFragment : Fragment() {
-    private lateinit var viewModel: MemoListViewModel
+    private val viewModel: MemoListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val database = getDatabase(requireActivity().application)
-        val repository = MemoRepository(database.memoDao)
-        viewModel = ViewModelProvider(this, MemoListViewModelFactory(repository))
-            .get(MemoListViewModel::class.java)
-
         val binding = MemoListFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
 
@@ -38,6 +34,7 @@ class MemoListFragment : Fragment() {
         val adapter = MemoListAdapter(memoListListener)
         binding.memoListRecyclerView.adapter = adapter
         viewModel.items.observe(viewLifecycleOwner) {
+            Timber.d("list changed first: ${it.getOrNull(1)}")
             adapter.submitList(it)
         }
         binding.memoListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {

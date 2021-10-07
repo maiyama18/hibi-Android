@@ -3,8 +3,9 @@ package com.muijp.hibi.repository
 import androidx.lifecycle.LiveData
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.database.memo.MemoDao
+import javax.inject.Inject
 
-class MemoRepository(
+class MemoRepository @Inject constructor(
     private val memoDao: MemoDao,
 ) {
     fun observe(limit: Int): LiveData<List<Memo>> {

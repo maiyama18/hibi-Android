@@ -5,32 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.viewModels
 import com.muijp.hibi.R
-import com.muijp.hibi.database.getDatabase
 import com.muijp.hibi.databinding.MemoEditFragmentBinding
 import com.muijp.hibi.extension.focus
-import com.muijp.hibi.provider.StringProvider
-import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.MainActivity
 import com.muijp.hibi.ui.dialog.MessageDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MemoEditFragment : Fragment() {
     private lateinit var binding: MemoEditFragmentBinding
-    private lateinit var viewModel: MemoEditViewModel
-    private val args: MemoEditFragmentArgs by navArgs()
+    private val viewModel: MemoEditViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val database = getDatabase(requireActivity().application)
-        val repository = MemoRepository(database.memoDao)
-        val stringProvider = StringProvider(requireActivity())
-        viewModel = ViewModelProvider(this, MemoEditViewModelFactory(args.id, repository, stringProvider))
-            .get(MemoEditViewModel::class.java)
-
         binding = MemoEditFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner

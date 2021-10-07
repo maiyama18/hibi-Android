@@ -4,9 +4,12 @@ import androidx.lifecycle.*
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MemoSearchViewModel(
+@HiltViewModel
+class MemoSearchViewModel @Inject constructor(
     private val repository: MemoRepository,
 ): ViewModel() {
     val query = MutableLiveData<String>()
@@ -38,15 +41,5 @@ class MemoSearchViewModel(
         viewModelScope.launch {
             memos.value = repository.search(query)
         }
-    }
-}
-
-class MemoSearchViewModelFactory(private val repository: MemoRepository): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MemoSearchViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return MemoSearchViewModel(repository) as T
-        }
-        throw IllegalArgumentException("unable to construct MemoSearchViewModel")
     }
 }

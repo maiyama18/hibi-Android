@@ -6,13 +6,19 @@ import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.extension.formattedDateTime
 import com.muijp.hibi.provider.StringProvider
 import com.muijp.hibi.repository.MemoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MemoEditViewModel(
-    private val memoId: String?,
+@HiltViewModel
+class MemoEditViewModel @Inject constructor(
     private val repository: MemoRepository,
     private val stringProvider: StringProvider,
+    private val state: SavedStateHandle,
 ): ViewModel() {
+    private val memoId: String?
+        get() = state.get<String>("id")
+
     private lateinit var memo: Memo
 
     val memoText = MutableLiveData<String>()
@@ -31,7 +37,7 @@ class MemoEditViewModel(
     fun retrieveMemo() {
         viewModelScope.launch {
             val m = if (memoId != null) {
-                repository.find(memoId)
+                repository.find(memoId!!)
             } else {
                 null
             }
@@ -62,19 +68,5 @@ class MemoEditViewModel(
             repository.delete(memo)
             _backToPrevious.value = true
         }
-    }
-}
-
-class MemoEditViewModelFactory(
-    private val memoId: String?,
-    private val repository: MemoRepository,
-    private val stringProvider: StringProvider,
-): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MemoEditViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return MemoEditViewModel(memoId, repository, stringProvider) as T
-        }
-        throw IllegalArgumentException("unable to construct MemoEditViewModel")
     }
 }
