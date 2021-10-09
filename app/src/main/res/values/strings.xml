@@ -10,4 +10,6 @@
     <string name="action_search_memo">メモを検索する</string>
     <string name="search_memo">メモ検索</string>
     <string name="memos_empty_text">まだメモがありません</string>
+    <string name="input_search_query">検索ワードを入力してください</string>
+    <string name="no_search_result">\'%1$s\'の検索結果はありません</string>
 </resources>

@@ -26,7 +26,17 @@
             android:id="@+id/memo_searched_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <TextView
+            android:id="@+id/empty_search_result_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="160dp"
+            android:visibility="visible"
+            android:text="@string/input_search_query" />
 
     </LinearLayout>
 </layout>
