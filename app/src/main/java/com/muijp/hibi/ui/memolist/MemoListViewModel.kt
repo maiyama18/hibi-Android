@@ -50,13 +50,3 @@ class MemoListViewModel @Inject constructor(
         }
     }
 }
-
-class MemoListViewModelFactory(private val repository: MemoRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MemoListViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return MemoListViewModel(repository) as T
-        }
-        throw IllegalArgumentException("unable to construct MemoListViewModel")
-    }
-}
