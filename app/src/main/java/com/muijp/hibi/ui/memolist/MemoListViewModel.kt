@@ -39,8 +39,8 @@ class MemoListViewModel @Inject constructor(
     }
 
     fun onScrolledToBottom() {
-        val currentMemosCount = memos.value?.size ?: 0
         viewModelScope.launch {
+            val currentMemosCount = memos.value?.size ?: 0
             val allMemosCount = repository.count()
             if (currentMemosCount >= allMemosCount) {
                 return@launch
