@@ -15,7 +15,6 @@ import com.muijp.hibi.ui.MainActivity
 import com.muijp.hibi.ui.recyclerview.memolist.MemoListAdapter
 import com.muijp.hibi.ui.recyclerview.memolist.MemoListListener
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MemoListFragment : Fragment() {
@@ -33,9 +32,15 @@ class MemoListFragment : Fragment() {
         }
         val adapter = MemoListAdapter(memoListListener)
         binding.memoListRecyclerView.adapter = adapter
-        viewModel.items.observe(viewLifecycleOwner) {
-            Timber.d("list changed first: ${it.getOrNull(1)}")
-            adapter.submitList(it)
+        viewModel.items.observe(viewLifecycleOwner) { memoItems ->
+            if (memoItems.isEmpty()) {
+                binding.memoListRecyclerView.visibility = View.GONE
+                binding.emptyTextView.visibility = View.VISIBLE
+            } else {
+                binding.memoListRecyclerView.visibility = View.VISIBLE
+                binding.emptyTextView.visibility = View.GONE
+            }
+            adapter.submitList(memoItems)
         }
         binding.memoListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

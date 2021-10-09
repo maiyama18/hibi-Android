@@ -17,6 +17,14 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <TextView
+            android:id="@+id/empty_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/memos_empty_text" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/memo_list_fab"
             android:onClick="@{() -> viewModel.goToMemoCreate()}"
