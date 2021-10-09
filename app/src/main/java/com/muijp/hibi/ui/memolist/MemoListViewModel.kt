@@ -19,7 +19,7 @@ class MemoListViewModel @Inject constructor(
 
     private val limit: MutableLiveData<Int> = MutableLiveData(LIMIT_UNIT)
     private val memos: LiveData<List<Memo>> = Transformations.switchMap(limit) {
-        repository.observe(it)
+        repository.liveDataByLimit(it)
     }
     val items = Transformations.map(memos) { memos ->
         Timber.d("memos first: ${memos.firstOrNull()?.text}")

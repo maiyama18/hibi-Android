@@ -8,8 +8,8 @@ import javax.inject.Inject
 class MemoRepository @Inject constructor(
     private val memoDao: MemoDao,
 ) {
-    fun observe(limit: Int): LiveData<List<Memo>> {
-        return memoDao.observe(limit)
+    fun liveDataByLimit(limit: Int): LiveData<List<Memo>> {
+        return memoDao.liveDataByLimit(limit)
     }
 
     suspend fun count(): Long {

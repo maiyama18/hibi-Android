@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface MemoDao {
     @Query("SELECT * FROM memo ORDER BY createdAt DESC LIMIT :limit")
-    fun observe(limit: Int): LiveData<List<Memo>>
+    fun liveDataByLimit(limit: Int): LiveData<List<Memo>>
 
     @Query("SELECT COUNT(id) FROM memo")
     suspend fun count(): Long
