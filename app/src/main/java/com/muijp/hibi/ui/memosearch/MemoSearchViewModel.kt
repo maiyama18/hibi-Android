@@ -1,9 +1,11 @@
 package com.muijp.hibi.ui.memosearch
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,9 +17,6 @@ class MemoSearchViewModel @Inject constructor(
     val query = MutableLiveData<String>()
 
     private val memos = MutableLiveData<List<Memo>>()
-    val items = Transformations.map(memos) { memos ->
-        memosToMemoListItems(memos)
-    }
 
     private val _goToMemoEdit = MutableLiveData<Boolean>()
     val goToMemoEdit: LiveData<Boolean>

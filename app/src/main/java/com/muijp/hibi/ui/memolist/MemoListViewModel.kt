@@ -3,10 +3,8 @@ package com.muijp.hibi.ui.memolist
 import androidx.lifecycle.*
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,10 +18,6 @@ class MemoListViewModel @Inject constructor(
     private val limit: MutableLiveData<Int> = MutableLiveData(LIMIT_UNIT)
     private val memos: LiveData<List<Memo>> = Transformations.switchMap(limit) {
         repository.liveDataByLimit(it)
-    }
-    val items = Transformations.map(memos) { memos ->
-        Timber.d("memos first: ${memos.firstOrNull()?.text}")
-        memosToMemoListItems(memos)
     }
 
     private val _goToMemoCreate = MutableLiveData<Boolean>()

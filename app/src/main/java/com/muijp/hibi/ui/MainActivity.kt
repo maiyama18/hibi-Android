@@ -1,33 +1,30 @@
 package com.muijp.hibi.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import com.muijp.hibi.R
-import com.muijp.hibi.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity: AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-
+class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        setContent {
+            Hello()
+        }
     }
+}
 
-    fun setToolbarTitle(title: String) {
-        binding.toolbar.title = title
-    }
-
-    val toolbar: androidx.appcompat.widget.Toolbar
-        get() = binding.toolbar
+@Composable
+fun Hello() {
+    Text(
+        "Hello Compose",
+        modifier = Modifier.background(Color.Red)
+    )
 }
