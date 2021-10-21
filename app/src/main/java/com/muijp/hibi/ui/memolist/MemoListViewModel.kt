@@ -5,6 +5,7 @@ import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,8 +17,9 @@ class MemoListViewModel @Inject constructor(
     }
 
     private val limit: MutableLiveData<Int> = MutableLiveData(LIMIT_UNIT)
-    private val memos: LiveData<List<Memo>> = Transformations.switchMap(limit) {
+    val memos: LiveData<Map<LocalDate, List<Memo>>> = Transformations.switchMap(limit) {
         repository.liveDataByLimit(it)
+            .map { memoList -> memoList.groupBy { memo -> memo.createdAt.toLocalDate() } }
     }
 
     private val _goToMemoCreate = MutableLiveData<Boolean>()
