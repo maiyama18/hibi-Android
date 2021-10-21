@@ -3,9 +3,7 @@ package com.muijp.hibi.ui.memolist
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -77,7 +75,15 @@ fun MemoListBody(memos: Map<LocalDate, List<Memo>>) {
 
 @Composable
 fun MemoListEmptyBody() {
-    Text("empty")
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            "まだメモがありません",
+        )
+    }
 }
 
 @Composable
