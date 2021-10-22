@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -17,12 +18,20 @@ import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.ui.components.MemoItem
 
 @Composable
-fun MemoSearchScreen(viewModel: MemoSearchViewModel) {
+fun MemoSearchScreen(
+    viewModel: MemoSearchViewModel,
+    navToBack: () -> Unit,
+) {
     Scaffold() {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text(text = "メモ検索") },
+                    navigationIcon = {
+                        IconButton(onClick = navToBack) {
+                            Icon(Icons.Filled.ArrowBack, contentDescription = "戻る")
+                        }
+                    }
                 )
             },
         ) {
@@ -54,7 +63,7 @@ fun MemoSearchBody(memos: List<Memo>, query: String, onQueryChanged: (query: Str
         )
         
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         LazyColumn {
             items(memos) {
                 MemoItem(it, onMemoTapped = {}, showFullDateTime = true)

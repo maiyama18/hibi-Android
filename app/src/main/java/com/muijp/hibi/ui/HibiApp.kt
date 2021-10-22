@@ -17,12 +17,13 @@ import com.muijp.hibi.ui.memosearch.MemoSearchViewModel
 import com.muijp.hibi.ui.theme.HibiTheme
 
 sealed class HibiScreen(val route: String) {
-    class MemoList: HibiScreen("list")
-    class MemoCreate: HibiScreen("create")
-    class MemoEdit: HibiScreen("edit/{id}") {
+    class MemoList : HibiScreen("list")
+    class MemoCreate : HibiScreen("create")
+    class MemoEdit : HibiScreen("edit/{id}") {
         fun fullRoute(id: String) = "edit/$id"
     }
-    class MemoSearch: HibiScreen("search")
+
+    class MemoSearch : HibiScreen("search")
 }
 
 @ExperimentalFoundationApi
@@ -37,7 +38,11 @@ fun HibiApp() {
                 MemoListScreen(
                     viewModel,
                     navToMemoCreate = { navController.navigate(HibiScreen.MemoCreate().route) },
-                    navToMemoEdit = { id -> navController.navigate(HibiScreen.MemoEdit().fullRoute(id)) },
+                    navToMemoEdit = { id ->
+                        navController.navigate(
+                            HibiScreen.MemoEdit().fullRoute(id)
+                        )
+                    },
                     navToMemoSearch = { navController.navigate(HibiScreen.MemoSearch().route) },
                 )
             }
@@ -67,7 +72,10 @@ fun HibiApp() {
 
             composable(HibiScreen.MemoSearch().route) {
                 val viewModel = hiltViewModel<MemoSearchViewModel>()
-                MemoSearchScreen(viewModel)
+                MemoSearchScreen(
+                    viewModel,
+                    navToBack = { navController.popBackStack() },
+                )
             }
         }
     }
