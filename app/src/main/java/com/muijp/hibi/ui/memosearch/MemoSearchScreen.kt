@@ -41,7 +41,7 @@ fun MemoSearchScreen(viewModel: MemoSearchViewModel) {
 @Composable
 fun MemoSearchBody(memos: List<Memo>, query: String, onQueryChanged: (query: String) -> Unit) {
     val focusRequester = remember { FocusRequester() }
-    
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +58,7 @@ fun MemoSearchBody(memos: List<Memo>, query: String, onQueryChanged: (query: Str
         
         LazyColumn {
             items(memos) {
-                MemoItem(it, onMemoTapped = {})
+                MemoItem(it, onMemoTapped = {}, showFullDateTime = true)
             }
         }
 

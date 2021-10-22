@@ -12,17 +12,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.muijp.hibi.database.memo.Memo
+import com.muijp.hibi.extension.formattedDateTime
 import com.muijp.hibi.extension.formattedTime
 
 @Composable
-fun MemoItem(memo: Memo, onMemoTapped: (id: String) -> Unit) {
+fun MemoItem(memo: Memo, onMemoTapped: (id: String) -> Unit, showFullDateTime: Boolean = false) {
     Column(
         modifier = Modifier.padding(vertical = 6.dp),
     ) {
         MemoBalloon(memo.text, onTapped = { onMemoTapped(memo.id) })
 
         Text(
-            memo.createdAt.formattedTime,
+            if (showFullDateTime) memo.createdAt.formattedDateTime else memo.createdAt.formattedTime,
             style = MaterialTheme.typography.caption,
         )
     }
