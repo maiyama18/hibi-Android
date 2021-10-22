@@ -40,6 +40,7 @@ fun MemoEditScreen(
                 .fillMaxSize()
                 .padding(16.dp)
                 .focusRequester(focusRequester),
+            textStyle = MaterialTheme.typography.body1,
         )
 
         SideEffect {
