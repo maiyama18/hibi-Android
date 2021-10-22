@@ -20,6 +20,7 @@ import com.muijp.hibi.ui.components.MemoItem
 @Composable
 fun MemoSearchScreen(
     viewModel: MemoSearchViewModel,
+    navToMemoEdit: (id: String) -> Unit,
     navToBack: () -> Unit,
 ) {
     Scaffold() {
@@ -38,6 +39,7 @@ fun MemoSearchScreen(
             MemoSearchBody(
                 memos = viewModel.memos,
                 query = viewModel.query,
+                navToMemoEdit = navToMemoEdit,
                 onQueryChanged = viewModel::onQueryChanged,
             )
         }
@@ -45,7 +47,12 @@ fun MemoSearchScreen(
 }
 
 @Composable
-fun MemoSearchBody(memos: List<Memo>, query: String, onQueryChanged: (query: String) -> Unit) {
+fun MemoSearchBody(
+    memos: List<Memo>,
+    query: String,
+    navToMemoEdit: (id: String) -> Unit,
+    onQueryChanged: (query: String) -> Unit,
+) {
     val focusRequester = remember { FocusRequester() }
 
     Column (
@@ -66,7 +73,7 @@ fun MemoSearchBody(memos: List<Memo>, query: String, onQueryChanged: (query: Str
 
         LazyColumn {
             items(memos) {
-                MemoItem(it, onMemoTapped = {}, showFullDateTime = true)
+                MemoItem(it, onMemoTapped = navToMemoEdit, showFullDateTime = true)
             }
         }
 

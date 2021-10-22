@@ -74,6 +74,11 @@ fun HibiApp() {
                 val viewModel = hiltViewModel<MemoSearchViewModel>()
                 MemoSearchScreen(
                     viewModel,
+                    navToMemoEdit = { id ->
+                        navController.navigate(
+                            HibiScreen.MemoEdit().fullRoute(id)
+                        )
+                    },
                     navToBack = { navController.popBackStack() },
                 )
             }
