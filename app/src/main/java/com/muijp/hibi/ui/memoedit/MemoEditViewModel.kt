@@ -54,8 +54,14 @@ class MemoEditViewModel @Inject constructor(
 
     fun onMemoTextUpdated(updatedText: String) {
         viewModelScope.launch {
+            if (!::memo.isInitialized) {
+                return@launch
+            }
+
             inputText = updatedText
-            if (::memo.isInitialized && updatedText.isNotEmpty()) {
+            if (updatedText.isEmpty()) {
+                repository.delete(memo)
+            } else {
                 memo.text = updatedText
                 repository.upsert(memo)
             }
