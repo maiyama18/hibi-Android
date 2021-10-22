@@ -3,8 +3,6 @@ package com.muijp.hibi.ui.memoedit
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muijp.hibi.database.memo.Memo
@@ -16,10 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MemoEditViewModel @Inject constructor(
     private val repository: MemoRepository,
-): ViewModel() {
+) : ViewModel() {
     private lateinit var memo: Memo
-
-    var shouldFocusOnStart: Boolean = false
 
     var inputText by mutableStateOf("")
         private set
@@ -27,9 +23,16 @@ class MemoEditViewModel @Inject constructor(
     var title by mutableStateOf("")
         private set
 
-    private val _backToPrevious = MutableLiveData<Boolean>()
-    val backToPrevious: LiveData<Boolean>
-        get() = _backToPrevious
+    var isDeleteDialogOpen by mutableStateOf(false)
+        private set
+
+    var navToBack by mutableStateOf(false)
+        private set
+
+    var isNewMemo: Boolean = false
+
+    val isMemoSaved: Boolean
+        get() = ::memo.isInitialized && inputText.isNotEmpty()
 
     fun retrieveMemo(memoId: String?) {
         viewModelScope.launch {
@@ -43,11 +46,11 @@ class MemoEditViewModel @Inject constructor(
                 memo = m
                 inputText = m.text
                 title = "メモ編集"
-                shouldFocusOnStart = false
+                isNewMemo = false
             } else {
                 memo = Memo.new("")
                 title = "メモ作成"
-                shouldFocusOnStart = true
+                isNewMemo = true
             }
         }
     }
@@ -68,10 +71,23 @@ class MemoEditViewModel @Inject constructor(
         }
     }
 
+    fun openMemoDeleteDialog() {
+        isDeleteDialogOpen = true
+    }
+
+    fun closeMemoDeleteDialog() {
+        isDeleteDialogOpen = false
+    }
+
     fun onMemoDeleted() {
         viewModelScope.launch {
             repository.delete(memo)
-            _backToPrevious.value = true
+            closeMemoDeleteDialog()
+            navToBack = true
         }
+    }
+
+    fun onNavToBackCompleted() {
+        navToBack = false
     }
 }
