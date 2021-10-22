@@ -40,7 +40,7 @@ fun MemoBalloon(text: String, onTapped: () -> Unit) {
             text,
             modifier = Modifier
                 .background(MaterialTheme.colors.primary.copy(alpha = 0.1f))
-                .padding(12.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             style = MaterialTheme.typography.body1
         )
     }

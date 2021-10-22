@@ -1,9 +1,6 @@
 package com.muijp.hibi.ui.memosearch
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -55,6 +52,8 @@ fun MemoSearchBody(memos: List<Memo>, query: String, onQueryChanged: (query: Str
                 .fillMaxWidth()
                 .focusRequester(focusRequester),
         )
+        
+        Spacer(modifier = Modifier.height(8.dp))
         
         LazyColumn {
             items(memos) {
