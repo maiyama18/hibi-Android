@@ -5,7 +5,6 @@ import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -22,23 +21,8 @@ class MemoListViewModel @Inject constructor(
         repository.liveDataByLimit(it)
     }
     val memos: LiveData<Map<LocalDate, List<Memo>>> = Transformations.map(memoList) { memoList ->
-        Timber.d("memos count: ${memoList.size}")
         memoList.groupBy { memo -> memo.createdAt.toLocalDate() }
     }
-
-    private val _goToMemoCreate = MutableLiveData<Boolean>()
-    val goToMemoCreate: LiveData<Boolean>
-        get() = _goToMemoCreate
-
-    fun goToMemoCreate() {
-        _goToMemoCreate.value = true
-    }
-
-    fun goToMemoCreateComplete() {
-        _goToMemoCreate.value = false
-    }
-
-    private var scrolledToBottomOnLimit = 0
 
     fun onScrolledToBottom() {
         viewModelScope.launch {
