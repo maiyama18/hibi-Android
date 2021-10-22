@@ -36,7 +36,8 @@ fun HibiApp() {
                 MemoListScreen(
                     viewModel,
                     navToMemoCreate = { navController.navigate(HibiScreen.MemoCreate().route) },
-                    navToMemoEdit = { id -> navController.navigate(HibiScreen.MemoEdit().fullRoute(id)) }
+                    navToMemoEdit = { id -> navController.navigate(HibiScreen.MemoEdit().fullRoute(id)) },
+                    navToMemoSearch = { navController.navigate(HibiScreen.MemoSearch().route) },
                 )
             }
 

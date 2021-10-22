@@ -29,6 +29,7 @@ fun MemoListScreen(
     viewModel: MemoListViewModel,
     navToMemoCreate: () -> Unit,
     navToMemoEdit: (id: String) -> Unit,
+    navToMemoSearch: () -> Unit,
 ) {
     val memos by viewModel.memos.observeAsState()
 
@@ -37,7 +38,7 @@ fun MemoListScreen(
             TopAppBar(
                 title = { Text(text = "メモ一覧") },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = navToMemoSearch) {
                         Icon(Icons.Filled.Search, contentDescription = "メモ検索")
                     }
                 },
