@@ -27,6 +27,8 @@ import java.time.LocalDate
 @Composable
 fun MemoListScreen(
     viewModel: MemoListViewModel,
+    navToMemoCreate: () -> Unit,
+    navToMemoEdit: (id: String) -> Unit,
 ) {
     val memos by viewModel.memos.observeAsState()
 
@@ -42,7 +44,7 @@ fun MemoListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = navToMemoCreate) {
                 Icon(Icons.Filled.Edit, contentDescription = "メモ作成")
             }
         }
@@ -50,7 +52,8 @@ fun MemoListScreen(
         memos?.let {
             MemoListBody(
                 it,
-                onScrolledToBottom = { viewModel.onScrolledToBottom() }
+                onScrolledToBottom = { viewModel.onScrolledToBottom() },
+                navToMemoEdit = navToMemoEdit,
             )
         }
     }
@@ -58,7 +61,11 @@ fun MemoListScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MemoListBody(memos: Map<LocalDate, List<Memo>>, onScrolledToBottom: () -> Unit) {
+fun MemoListBody(
+    memos: Map<LocalDate,List<Memo>>,
+    onScrolledToBottom: () -> Unit,
+    navToMemoEdit: (id: String) -> Unit,
+) {
     val listState = rememberLazyListState()
 
     if (listState.isScrolledToTheEnd()) {
@@ -78,7 +85,7 @@ fun MemoListBody(memos: Map<LocalDate, List<Memo>>, onScrolledToBottom: () -> Un
                 }
 
                 items(memosOfDate) {
-                    MemoItem(it)
+                    MemoItem(it, onMemoTapped = navToMemoEdit)
                 }
             }
         }
@@ -122,11 +129,11 @@ fun Header(formattedDate: String) {
 }
 
 @Composable
-fun MemoItem(memo: Memo) {
+fun MemoItem(memo: Memo, onMemoTapped: (id: String) -> Unit) {
     Column(
-        modifier = Modifier.padding(vertical = 6.dp)
+        modifier = Modifier.padding(vertical = 6.dp),
     ) {
-        MemoBalloon(memo.text)
+        MemoBalloon(memo.text, onTapped = { onMemoTapped(memo.id) })
 
         Text(
             memo.createdAt.formattedTime,
@@ -135,10 +142,12 @@ fun MemoItem(memo: Memo) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MemoBalloon(text: String) {
+fun MemoBalloon(text: String, onTapped: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomEnd = 16.dp),
+        onClick = onTapped,
     ) {
         Text(
             text,

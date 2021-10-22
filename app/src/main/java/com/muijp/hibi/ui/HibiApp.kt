@@ -14,11 +14,13 @@ import com.muijp.hibi.ui.memolist.MemoListViewModel
 import com.muijp.hibi.ui.memosearch.MemoSearchScreen
 import com.muijp.hibi.ui.theme.HibiTheme
 
-enum class HibiScreen(val route: String) {
-    MemoList("list"),
-    MemoCreate("create"),
-    MemoEdit("edit/{id}"),
-    MemoSearch("search"),
+sealed class HibiScreen(val route: String) {
+    class MemoList: HibiScreen("list")
+    class MemoCreate: HibiScreen("create")
+    class MemoEdit: HibiScreen("edit/{id}") {
+        fun fullRoute(id: String) = "edit/$id"
+    }
+    class MemoSearch: HibiScreen("search")
 }
 
 @ExperimentalFoundationApi
@@ -27,18 +29,22 @@ fun HibiApp() {
     val navController = rememberNavController()
 
     HibiTheme {
-        NavHost(navController = navController, startDestination = HibiScreen.MemoList.route) {
-            composable(HibiScreen.MemoList.route) {
+        NavHost(navController = navController, startDestination = HibiScreen.MemoList().route) {
+            composable(HibiScreen.MemoList().route) {
                 val viewModel = hiltViewModel<MemoListViewModel>()
-                MemoListScreen(viewModel)
+                MemoListScreen(
+                    viewModel,
+                    navToMemoCreate = { navController.navigate(HibiScreen.MemoCreate().route) },
+                    navToMemoEdit = { id -> navController.navigate(HibiScreen.MemoEdit().fullRoute(id)) }
+                )
             }
 
-            composable(HibiScreen.MemoCreate.route) {
+            composable(HibiScreen.MemoCreate().route) {
                 MemoEditScreen()
             }
 
             composable(
-                HibiScreen.MemoEdit.route,
+                HibiScreen.MemoEdit().route,
                 arguments = listOf(navArgument("id") { type = NavType.StringType })
             ) { entry ->
                 val memoId = entry.arguments?.getString("id")
@@ -47,7 +53,7 @@ fun HibiApp() {
                 MemoEditScreen()
             }
 
-            composable(HibiScreen.MemoSearch.route) {
+            composable(HibiScreen.MemoSearch().route) {
                 MemoSearchScreen()
             }
         }
