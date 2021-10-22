@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -28,9 +29,9 @@ fun MemoDateHeader(formattedDate: String) {
         ) {
             Text(
                 formattedDate,
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                 color = MaterialTheme.colors.secondary,
-                style = MaterialTheme.typography.subtitle2,
+                style = MaterialTheme.typography.subtitle2.copy(fontWeight = FontWeight.Medium),
             )
         }
         Divider(color = MaterialTheme.colors.secondary)
