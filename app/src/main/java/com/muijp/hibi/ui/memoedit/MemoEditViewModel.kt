@@ -1,10 +1,13 @@
 package com.muijp.hibi.ui.memoedit
 
-import androidx.lifecycle.*
-import com.muijp.hibi.R
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.muijp.hibi.database.memo.Memo
-import com.muijp.hibi.extension.formattedDateTime
-import com.muijp.hibi.provider.StringProvider
 import com.muijp.hibi.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,51 +16,47 @@ import javax.inject.Inject
 @HiltViewModel
 class MemoEditViewModel @Inject constructor(
     private val repository: MemoRepository,
-    private val stringProvider: StringProvider,
-    private val state: SavedStateHandle,
 ): ViewModel() {
-    private val memoId: String?
-        get() = state.get<String>("id")
-
     private lateinit var memo: Memo
 
-    val memoText = MutableLiveData<String>()
+    var shouldFocusOnStart: Boolean = false
 
-    private val _title = MutableLiveData<String>()
-    val title: LiveData<String>
-        get() = _title
+    var inputText by mutableStateOf("")
+        private set
+
+    var title by mutableStateOf("")
+        private set
 
     private val _backToPrevious = MutableLiveData<Boolean>()
     val backToPrevious: LiveData<Boolean>
         get() = _backToPrevious
 
-    val shouldFocusOnStart: Boolean
-        get() = (memoId == null) && memoText.value.isNullOrEmpty()
-
-    fun retrieveMemo() {
+    fun retrieveMemo(memoId: String?) {
         viewModelScope.launch {
             val m = if (memoId != null) {
-                repository.find(memoId!!)
+                repository.find(memoId)
             } else {
                 null
             }
 
             if (m != null) {
                 memo = m
-                memoText.value = m.text
-                _title.value = m.createdAt.formattedDateTime
+                inputText = m.text
+                title = "メモ編集"
+                shouldFocusOnStart = false
             } else {
                 memo = Memo.new("")
-                _title.value = stringProvider.getString(R.string.new_memo)
+                title = "メモ作成"
+                shouldFocusOnStart = true
             }
         }
     }
 
-    fun onMemoTextUpdated() {
+    fun onMemoTextUpdated(updatedText: String) {
         viewModelScope.launch {
-            val memoText = memoText.value
-            if (::memo.isInitialized && !memoText.isNullOrEmpty()) {
-                memo.text = memoText
+            inputText = updatedText
+            if (::memo.isInitialized && updatedText.isNotEmpty()) {
+                memo.text = updatedText
                 repository.upsert(memo)
             }
         }

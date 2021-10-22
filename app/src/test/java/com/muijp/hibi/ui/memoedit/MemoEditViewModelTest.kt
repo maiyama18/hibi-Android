@@ -76,7 +76,7 @@ class MemoEditViewModelTest {
             .assertHasValue()
             .assertValue(memo.createdAt.formattedDateTime)
 
-        viewModel.memoText.test()
+        viewModel.inputText.test()
             .assertHasValue()
             .assertValue(memo.text)
 
@@ -92,7 +92,7 @@ class MemoEditViewModelTest {
 
         viewModel.retrieveMemo()
 
-        viewModel.memoText.value = "updated memo"
+        viewModel.inputText.value = "updated memo"
 
         // when
         viewModel.onMemoTextUpdated()
@@ -113,7 +113,7 @@ class MemoEditViewModelTest {
 
         viewModel.retrieveMemo()
 
-        viewModel.memoText.value = ""
+        viewModel.inputText.value = ""
 
         // when
         viewModel.onMemoTextUpdated()

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.muijp.hibi.ui.memoedit.MemoEditScreen
+import com.muijp.hibi.ui.memoedit.MemoEditViewModel
 import com.muijp.hibi.ui.memolist.MemoListScreen
 import com.muijp.hibi.ui.memolist.MemoListViewModel
 import com.muijp.hibi.ui.memosearch.MemoSearchScreen
@@ -40,7 +41,12 @@ fun HibiApp() {
             }
 
             composable(HibiScreen.MemoCreate().route) {
-                MemoEditScreen()
+                val viewModel = hiltViewModel<MemoEditViewModel>()
+                viewModel.retrieveMemo(null)
+                MemoEditScreen(
+                    viewModel,
+                    navToBack = { navController.popBackStack() },
+                )
             }
 
             composable(
@@ -48,9 +54,13 @@ fun HibiApp() {
                 arguments = listOf(navArgument("id") { type = NavType.StringType })
             ) { entry ->
                 val memoId = entry.arguments?.getString("id")
-                print(memoId)
+                val viewModel = hiltViewModel<MemoEditViewModel>()
+                viewModel.retrieveMemo(memoId)
 
-                MemoEditScreen()
+                MemoEditScreen(
+                    viewModel,
+                    navToBack = { navController.popBackStack() },
+                )
             }
 
             composable(HibiScreen.MemoSearch().route) {
