@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.extension.formattedDate
 import com.muijp.hibi.extension.formattedTime
+import com.muijp.hibi.extension.isScrolledToTheEnd
 import java.time.LocalDate
 
 @Composable
@@ -46,19 +48,29 @@ fun MemoListScreen(
         }
     ) {
         memos?.let {
-            MemoListBody(it)
+            MemoListBody(
+                it,
+                onScrolledToBottom = { viewModel.onScrolledToBottom() }
+            )
         }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MemoListBody(memos: Map<LocalDate, List<Memo>>) {
+fun MemoListBody(memos: Map<LocalDate, List<Memo>>, onScrolledToBottom: () -> Unit) {
+    val listState = rememberLazyListState()
+
+    if (listState.isScrolledToTheEnd()) {
+        onScrolledToBottom()
+    }
+
     if (memos.isEmpty()) {
         MemoListEmptyBody()
     } else {
         LazyColumn(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+            state = listState,
+            modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 16.dp),
         ) {
             memos.forEach { (date, memosOfDate) ->
                 stickyHeader {
