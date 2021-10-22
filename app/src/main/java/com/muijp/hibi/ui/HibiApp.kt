@@ -13,6 +13,7 @@ import com.muijp.hibi.ui.memoedit.MemoEditViewModel
 import com.muijp.hibi.ui.memolist.MemoListScreen
 import com.muijp.hibi.ui.memolist.MemoListViewModel
 import com.muijp.hibi.ui.memosearch.MemoSearchScreen
+import com.muijp.hibi.ui.memosearch.MemoSearchViewModel
 import com.muijp.hibi.ui.theme.HibiTheme
 
 sealed class HibiScreen(val route: String) {
@@ -65,7 +66,8 @@ fun HibiApp() {
             }
 
             composable(HibiScreen.MemoSearch().route) {
-                MemoSearchScreen()
+                val viewModel = hiltViewModel<MemoSearchViewModel>()
+                MemoSearchScreen(viewModel)
             }
         }
     }
