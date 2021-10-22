@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="half_margin">8dp</dimen>
-    <dimen name="regular_margin">16dp</dimen>
-    <dimen name="memo_baloon_margin">12dp</dimen>
-</resources>
