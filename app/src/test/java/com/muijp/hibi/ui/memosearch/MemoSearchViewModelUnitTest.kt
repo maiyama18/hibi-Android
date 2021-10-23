@@ -1,26 +1,20 @@
-package com.muijp.hibi
+package com.muijp.hibi.ui.memosearch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import com.muijp.hibi.ui.memosearch.MemoSearchViewModel
+import com.muijp.hibi.ui.utils.MainCoroutineRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
 import java.time.ZonedDateTime
 
 class MemoSearchViewModelUnitTest {
@@ -77,18 +71,5 @@ class MemoSearchViewModelUnitTest {
 
         coVerify(exactly = 1) { memoRepository.search("a", any()) }
         confirmVerified()
-    }
-}
-
-@ExperimentalCoroutinesApi
-class MainCoroutineRule : TestWatcher() {
-    override fun starting(description: Description?) {
-        super.starting(description)
-        Dispatchers.setMain(TestCoroutineDispatcher())
-    }
-
-    override fun finished(description: Description?) {
-        super.finished(description)
-        Dispatchers.resetMain()
     }
 }
