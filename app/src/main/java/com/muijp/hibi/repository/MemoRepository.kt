@@ -20,8 +20,8 @@ class MemoRepository @Inject constructor(
         return memoDao.find(id)
     }
 
-    suspend fun search(query: String): List<Memo> {
-        return memoDao.search("%${query}%")
+    suspend fun search(query: String, limit: Int): List<Memo> {
+        return memoDao.search("%${query}%", limit)
     }
 
     suspend fun upsert(memo: Memo) {

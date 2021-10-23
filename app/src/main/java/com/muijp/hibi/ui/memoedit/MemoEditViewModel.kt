@@ -1,10 +1,11 @@
 package com.muijp.hibi.ui.memoedit
 
-import androidx.lifecycle.*
-import com.muijp.hibi.R
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.muijp.hibi.database.memo.Memo
-import com.muijp.hibi.extension.formattedDateTime
-import com.muijp.hibi.provider.StringProvider
 import com.muijp.hibi.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,60 +14,80 @@ import javax.inject.Inject
 @HiltViewModel
 class MemoEditViewModel @Inject constructor(
     private val repository: MemoRepository,
-    private val stringProvider: StringProvider,
-    private val state: SavedStateHandle,
-): ViewModel() {
-    private val memoId: String?
-        get() = state.get<String>("id")
-
+) : ViewModel() {
     private lateinit var memo: Memo
 
-    val memoText = MutableLiveData<String>()
+    var inputText by mutableStateOf("")
+        private set
 
-    private val _title = MutableLiveData<String>()
-    val title: LiveData<String>
-        get() = _title
+    var title by mutableStateOf("")
+        private set
 
-    private val _backToPrevious = MutableLiveData<Boolean>()
-    val backToPrevious: LiveData<Boolean>
-        get() = _backToPrevious
+    var isDeleteDialogOpen by mutableStateOf(false)
+        private set
 
-    val shouldFocusOnStart: Boolean
-        get() = (memoId == null) && memoText.value.isNullOrEmpty()
+    var navToBack by mutableStateOf(false)
+        private set
 
-    fun retrieveMemo() {
+    var isNewMemo: Boolean = false
+
+    val isMemoSaved: Boolean
+        get() = ::memo.isInitialized && inputText.isNotEmpty()
+
+    fun retrieveMemo(memoId: String?) {
         viewModelScope.launch {
             val m = if (memoId != null) {
-                repository.find(memoId!!)
+                repository.find(memoId)
             } else {
                 null
             }
 
             if (m != null) {
                 memo = m
-                memoText.value = m.text
-                _title.value = m.createdAt.formattedDateTime
+                inputText = m.text
+                title = "メモ編集"
+                isNewMemo = false
             } else {
                 memo = Memo.new("")
-                _title.value = stringProvider.getString(R.string.new_memo)
+                title = "メモ作成"
+                isNewMemo = true
             }
         }
     }
 
-    fun onMemoTextUpdated() {
+    fun onMemoTextUpdated(updatedText: String) {
         viewModelScope.launch {
-            val memoText = memoText.value
-            if (::memo.isInitialized && !memoText.isNullOrEmpty()) {
-                memo.text = memoText
+            if (!::memo.isInitialized) {
+                return@launch
+            }
+
+            inputText = updatedText
+            if (updatedText.isEmpty()) {
+                repository.delete(memo)
+            } else {
+                memo.text = updatedText
                 repository.upsert(memo)
             }
         }
     }
 
+    fun openMemoDeleteDialog() {
+        isDeleteDialogOpen = true
+    }
+
+    fun closeMemoDeleteDialog() {
+        isDeleteDialogOpen = false
+    }
+
     fun onMemoDeleted() {
         viewModelScope.launch {
             repository.delete(memo)
-            _backToPrevious.value = true
+            closeMemoDeleteDialog()
+            navToBack = true
         }
+    }
+
+    fun onNavToBackCompleted() {
+        navToBack = false
     }
 }

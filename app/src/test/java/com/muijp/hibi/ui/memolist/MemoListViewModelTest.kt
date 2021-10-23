@@ -2,18 +2,20 @@ package com.muijp.hibi.ui.memolist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import com.google.common.truth.Truth.assertThat
 import com.jraska.livedata.test
-import com.muijp.hibi.MainCoroutineRule
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import io.mockk.*
+import com.muijp.hibi.ui.utils.MainCoroutineRule
+import io.mockk.MockKAnnotations
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.time.ZonedDateTime
-import java.util.concurrent.TimeUnit
 
 class MemoListViewModelTest {
     @get:Rule
@@ -31,99 +33,33 @@ class MemoListViewModelTest {
 
     @Test
     fun init() {
+        val today = ZonedDateTime.now()
+        val yesterday = ZonedDateTime.now().minusDays(1)
         // given
         every {
             memoRepository.liveDataByLimit(10)
         } returns MutableLiveData(
-            (1..10).map { i-> Memo("memoId$i", "this is memo $i", ZonedDateTime.now(), ZonedDateTime.now()) }
+            (1..10).map { i ->
+                Memo(
+                    "memoId$i",
+                    "this is memo $i",
+                    if (i >= 8) yesterday else today,
+                    if (i >= 8) yesterday else today
+                )
+            }
         )
 
         // when
         val viewModel = MemoListViewModel(memoRepository)
 
         // then
-        viewModel.items.test()
-            .assertHasValue()
-            .assertValue { it.size == 11 }
-            .assertValue { it.last().id == "memoId10" }
+        val memos = viewModel.memos.test()
+            .value()
 
-        confirmVerified()
-    }
+        assertThat(memos.keys.size).isEqualTo(2)
+        assertThat(memos[today.toLocalDate()]?.size).isEqualTo(7)
+        assertThat(memos[yesterday.toLocalDate()]?.size).isEqualTo(3)
 
-    @Test
-    fun onScrolledToBottom_allMemosAlreadyShown() {
-        // given
-        every {
-            memoRepository.liveDataByLimit(10)
-        } returns MutableLiveData(
-            (1..10).map { i-> Memo("memoId$i", "this is memo $i", ZonedDateTime.now(), ZonedDateTime.now()) }
-        )
-
-        coEvery {
-            memoRepository.count()
-        } returns 10
-
-        val viewModel = MemoListViewModel(memoRepository)
-
-        viewModel.items.test()
-            .awaitValue()
-            .assertHasValue()
-            .assertValue { it.size == 11 }
-
-        // when
-        viewModel.onScrolledToBottom()
-
-        // then
-        viewModel.items.test()
-            .assertHasValue()
-            .assertValue { it.size == 11 }
-
-        verify(exactly = 1) { memoRepository.liveDataByLimit(10) }
-        verify(exactly = 0) { memoRepository.liveDataByLimit(20) }
-        coVerify(exactly = 1) { memoRepository.count() }
-        confirmVerified()
-    }
-
-    @Test
-    fun onScrolledToBottom_readMoreMemos() {
-        // given
-        every {
-            memoRepository.liveDataByLimit(10)
-        } returns MutableLiveData(
-            (1..10).map { i-> Memo("memoId$i", "this is memo $i", ZonedDateTime.now(), ZonedDateTime.now()) }
-        )
-
-        coEvery {
-            memoRepository.count()
-        } returns 100
-
-        every {
-            memoRepository.liveDataByLimit(20)
-        } returns MutableLiveData(
-            (1..20).map { i-> Memo("memoId$i", "this is memo $i", ZonedDateTime.now(), ZonedDateTime.now()) }
-        )
-
-        val viewModel = MemoListViewModel(memoRepository)
-
-        viewModel.items.test()
-            .awaitValue()
-            .assertHasValue()
-            .assertValue { it.size == 11 }
-
-        // when
-        viewModel.onScrolledToBottom()
-
-        // then
-        viewModel.items.test()
-            .awaitNextValue(1, TimeUnit.SECONDS)
-            .assertHasValue()
-            .assertValue { it.size == 21 }
-
-        verify(exactly = 1) {
-            memoRepository.liveDataByLimit(10)
-            memoRepository.liveDataByLimit(20)
-        }
-        coVerify(exactly = 1) { memoRepository.count() }
         confirmVerified()
     }
 }

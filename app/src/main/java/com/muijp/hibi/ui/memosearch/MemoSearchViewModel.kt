@@ -1,9 +1,12 @@
 package com.muijp.hibi.ui.memosearch
 
-import androidx.lifecycle.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.muijp.hibi.database.memo.Memo
 import com.muijp.hibi.repository.MemoRepository
-import com.muijp.hibi.ui.recyclerview.memolist.memosToMemoListItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,34 +15,26 @@ import javax.inject.Inject
 class MemoSearchViewModel @Inject constructor(
     private val repository: MemoRepository,
 ): ViewModel() {
-    val query = MutableLiveData<String>()
-
-    private val memos = MutableLiveData<List<Memo>>()
-    val items = Transformations.map(memos) { memos ->
-        memosToMemoListItems(memos)
+    companion object {
+        const val LIMIT = 50
     }
 
-    private val _goToMemoEdit = MutableLiveData<Boolean>()
-    val goToMemoEdit: LiveData<Boolean>
-        get() = _goToMemoEdit
+    var query by mutableStateOf("")
+    var memos by mutableStateOf<List<Memo>>(emptyList())
 
-    fun goToMemoEdit() {
-        _goToMemoEdit.value = true
+    fun onQueryChanged(query: String) {
+        this.query = query.trim()
+        searchMemos(query)
     }
 
-    fun goToMemoEditComplete() {
-        _goToMemoEdit.value = false
-    }
-
-    fun searchMemos() {
-        val query = query.value?.trim()
-        if (query.isNullOrEmpty()) {
-            memos.value = emptyList()
+    private fun searchMemos(query: String) {
+        if (query.isEmpty()) {
+            memos = emptyList()
             return
         }
 
         viewModelScope.launch {
-            memos.value = repository.search(query)
+            memos = repository.search(query, LIMIT)
         }
     }
 }

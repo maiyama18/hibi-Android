@@ -1,15 +1,14 @@
 package com.muijp.hibi.ui.memoedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.SavedStateHandle
-import com.jraska.livedata.test
-import com.muijp.hibi.MainCoroutineRule
-import com.muijp.hibi.R
+import com.google.common.truth.Truth.assertThat
 import com.muijp.hibi.database.memo.Memo
-import com.muijp.hibi.extension.formattedDateTime
-import com.muijp.hibi.provider.StringProvider
 import com.muijp.hibi.repository.MemoRepository
-import io.mockk.*
+import com.muijp.hibi.ui.utils.MainCoroutineRule
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +19,7 @@ import java.time.ZonedDateTime
 
 class MemoEditViewModelTest {
     companion object {
-        val memo = Memo("memoId", "existing memo", ZonedDateTime.now(), ZonedDateTime.now())
+        val mockMemo = Memo("mockMemoId", "existing memo", ZonedDateTime.now(), ZonedDateTime.now())
     }
 
     @get:Rule
@@ -33,12 +32,6 @@ class MemoEditViewModelTest {
     @MockK
     lateinit var memoRepository: MemoRepository
 
-    @MockK
-    lateinit var stringProvider: StringProvider
-
-    @MockK
-    lateinit var state: SavedStateHandle
-
     @InjectMockKs
     lateinit var viewModel: MemoEditViewModel
 
@@ -48,58 +41,51 @@ class MemoEditViewModelTest {
     @Test
     fun retrieveMemo_newMemo() {
         // given
-        every { state.get<String>("id") } returns null
-        every { stringProvider.getString(R.string.new_memo) } returns "new memo"
 
         // when
-        viewModel.retrieveMemo()
+        viewModel.retrieveMemo(null)
 
         // then
-        viewModel.title.test()
-            .assertHasValue()
-            .assertValue("new memo")
+        assertThat(viewModel.title).isEqualTo("メモ作成")
+        assertThat(viewModel.isNewMemo).isEqualTo(true)
 
+        coVerify(exactly = 0) { memoRepository.find(any()) }
         confirmVerified()
     }
 
     @Test
     fun retrieveMemo_existingMemo() {
         // given
-        every { state.get<String>("id") } returns "memoId"
-        coEvery { memoRepository.find("memoId") } returns memo
+        coEvery { memoRepository.find(mockMemo.id) } returns mockMemo
 
         // when
-        viewModel.retrieveMemo()
+        viewModel.retrieveMemo(mockMemo.id)
 
         // then
-        viewModel.title.test()
-            .assertHasValue()
-            .assertValue(memo.createdAt.formattedDateTime)
+        assertThat(viewModel.title).isEqualTo("メモ編集")
+        assertThat(viewModel.isNewMemo).isEqualTo(false)
+        assertThat(viewModel.inputText).isEqualTo(mockMemo.text)
 
-        viewModel.memoText.test()
-            .assertHasValue()
-            .assertValue(memo.text)
-
+        coVerify(exactly = 1) { memoRepository.find(mockMemo.id) }
         confirmVerified()
     }
 
     @Test
     fun onMemoTextUpdated_memoInputted() {
         // given
-        every { state.get<String>("id") } returns "memoId"
-        coEvery { memoRepository.find("memoId") } returns memo
+        coEvery { memoRepository.find(mockMemo.id) } returns mockMemo
         coEvery { memoRepository.upsert(any()) } returns Unit
 
-        viewModel.retrieveMemo()
-
-        viewModel.memoText.value = "updated memo"
+        viewModel.retrieveMemo(mockMemo.id)
 
         // when
-        viewModel.onMemoTextUpdated()
+        viewModel.onMemoTextUpdated("updated memo")
 
         // then
+        assertThat(viewModel.inputText).isEqualTo("updated memo")
+
         coVerify(exactly = 1) {
-            memoRepository.upsert(memo.copy(text = "updated memo"))
+            memoRepository.upsert(mockMemo.copy(text = "updated memo"))
         }
         confirmVerified()
     }
@@ -107,20 +93,21 @@ class MemoEditViewModelTest {
     @Test
     fun onMemoTextUpdated_memoEmptied() {
         // given
-        every { state.get<String>("id") } returns "memoId"
-        coEvery { memoRepository.find("memoId") } returns memo
+        coEvery { memoRepository.find(mockMemo.id) } returns mockMemo
         coEvery { memoRepository.upsert(any()) } returns Unit
+        coEvery { memoRepository.delete(any()) } returns Unit
 
-        viewModel.retrieveMemo()
-
-        viewModel.memoText.value = ""
+        viewModel.retrieveMemo(mockMemo.id)
 
         // when
-        viewModel.onMemoTextUpdated()
+        viewModel.onMemoTextUpdated("")
 
         // then
         coVerify(exactly = 0) {
             memoRepository.upsert(any())
+        }
+        coVerify(exactly = 1) {
+            memoRepository.delete(mockMemo)
         }
         confirmVerified()
     }
@@ -128,22 +115,19 @@ class MemoEditViewModelTest {
     @Test
     fun onMemoDeleted() {
         // given
-        every { state.get<String>("id") } returns "memoId"
-        coEvery { memoRepository.find("memoId") } returns memo
-        coEvery { memoRepository.delete(memo) } returns Unit
+        coEvery { memoRepository.find(mockMemo.id) } returns mockMemo
+        coEvery { memoRepository.delete(any()) } returns Unit
 
-        viewModel.retrieveMemo()
+        viewModel.retrieveMemo(mockMemo.id)
 
         // when
         viewModel.onMemoDeleted()
 
         // then
-        viewModel.backToPrevious.test()
-            .assertHasValue()
-            .assertValue(true)
+        assertThat(viewModel.navToBack).isEqualTo(true)
 
         coVerify(exactly = 1) {
-            memoRepository.delete(memo)
+            memoRepository.delete(mockMemo)
         }
         confirmVerified()
     }
