@@ -2,12 +2,9 @@ package com.muijp.hibi
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.jraska.livedata.test
 import com.muijp.hibi.database.memo.Memo
-import com.muijp.hibi.extension.formattedDate
 import com.muijp.hibi.repository.MemoRepository
 import com.muijp.hibi.ui.memosearch.MemoSearchViewModel
-import com.muijp.hibi.ui.recyclerview.memolist.MemoListItem
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -48,49 +45,37 @@ class MemoSearchViewModelUnitTest {
     @Test
     fun searchMemos_queryEmpty() {
         // given
-        viewModel.query.value = ""
-        val itemsObserver = viewModel.items.test()
 
         // when
-        viewModel.searchMemos()
+        viewModel.onQueryChanged("")
 
         // then
-        itemsObserver
-            .assertHasValue()
-            .assertValue { it.isEmpty() }
-            .assertHistorySize(1)
+        assertThat(viewModel.memos.size).isEqualTo(0)
 
-        coVerify(exactly = 0) { memoRepository.search(any()) }
+        coVerify(exactly = 0) { memoRepository.search(any(), any()) }
     }
 
     @Test
     fun searchMemos_queryInputted() {
         // given
         coEvery {
-            memoRepository.search("a")
-        } returns listOf(Memo("dummyId", "abc", ZonedDateTime.now(), ZonedDateTime.now()))
-
-        val itemsObserver = viewModel.items.test()
+            memoRepository.search("a", any())
+        } returns listOf(
+            Memo("dummyId1", "abc", ZonedDateTime.now(), ZonedDateTime.now()),
+            Memo("dummyId2", "edf", ZonedDateTime.now(), ZonedDateTime.now()),
+        )
 
         // when
-        viewModel.query.value = ""
-        viewModel.searchMemos()
-        viewModel.query.value = "a"
-        viewModel.searchMemos()
+        viewModel.onQueryChanged("a")
 
         // then
-        val history = itemsObserver.valueHistory()
-        assertThat(history.size).isEqualTo(2)
-        assertThat(history[0].isEmpty())
+        assertThat(viewModel.memos.size).isEqualTo(2)
+        assertThat(viewModel.memos[0].id).isEqualTo("dummyId1")
+        assertThat(viewModel.memos[0].text).isEqualTo("abc")
+        assertThat(viewModel.memos[1].id).isEqualTo("dummyId2")
+        assertThat(viewModel.memos[1].text).isEqualTo("edf")
 
-        val items = history[1]
-        assertThat(items.size).isEqualTo(2)
-        assertThat((items[0] as MemoListItem.HeaderItem).formattedDate).isEqualTo(ZonedDateTime.now().toLocalDate().formattedDate)
-        val memoItem = items[1] as MemoListItem.MemoItem
-        assertThat(memoItem.id).isEqualTo("dummyId")
-        assertThat(memoItem.text).isEqualTo("abc")
-
-        coVerify(exactly = 1) { memoRepository.search("a") }
+        coVerify(exactly = 1) { memoRepository.search("a", any()) }
         confirmVerified()
     }
 }
