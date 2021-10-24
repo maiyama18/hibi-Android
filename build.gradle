@@ -12,6 +12,7 @@ buildscript {
         mockk_version = '1.12.0'
         compose_version = '1.0.4'
         hilt_navigation_compose_version = '1.0.0-alpha03'
+        accompanist_version = '0.20.0'
     }
 
     repositories {
