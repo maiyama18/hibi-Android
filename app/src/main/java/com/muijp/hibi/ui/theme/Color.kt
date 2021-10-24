@@ -19,3 +19,5 @@ val lightColors = lightColors(
     onBackground = gray900,
     onSurface = gray900,
 )
+
+val statusBarColor = blueGray900
