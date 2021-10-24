@@ -13,6 +13,8 @@ buildscript {
         compose_version = '1.0.4'
         hilt_navigation_compose_version = '1.0.0-alpha03'
         accompanist_version = '0.20.0'
+        google_services_version = '4.3.10'
+        firebase_bom_version = '28.4.2'
     }
 
     repositories {
@@ -26,6 +28,8 @@ buildscript {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
 
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+
+        classpath "com.google.gms:google-services:$google_services_version"
     }
 }
 
